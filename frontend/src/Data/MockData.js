@@ -1,0 +1,72 @@
+export const MockData = [
+    {
+        id: 1,
+        nev: "Kis Pista",
+        szak: "Mérnökinformatika",
+        status: "Folyamatban",
+        cegnev: "Mercedes-Benz"
+    },
+    {
+        id: 2,
+        nev: "Nagy Anna",
+        szak: "Logisztika",
+        status: "Befejezett",
+        cegnev: "Knorr-Bremse"
+    },
+    {
+        id: 3,
+        nev: "Kovács Béla",
+        szak: "Gépészmérnök",
+        status: "Még nem kezdte",
+        cegnev: "Mercedes-Benz"
+    },
+    {
+        id: 4,
+        nev: "Szabó Eszter",
+        szak: "Járműmérnök",
+        status: "Folyamatban",
+        cegnev: "Bosch"
+    },
+    {
+        id: 5,
+        nev: "Tóth Gábor",
+        szak: "Mérnökinformatika",
+        status: "Befejezett",
+        cegnev: "Mirelite Mirsa"
+    },
+    {
+        id: 6,
+        nev: "Horváth Lili",
+        szak: "Logisztika",
+        status: "Még nem kezdte",
+        cegnev: "Duvenbeck"
+    },
+    {
+        id: 7,
+        nev: "Varga Zoltán",
+        szak: "Gépészmérnök",
+        status: "Folyamatban",
+        cegnev: "Phoenix Mecano"
+    },
+    {
+        id: 8,
+        nev: "Molnár Dóra",
+        szak: "Járműmérnök",
+        status: "Befejezett",
+        cegnev: "Mercedes-Benz"
+    },
+    {
+        id: 9,
+        nev: "Fekete Péter",
+        szak: "Mérnökinformatika",
+        status: "Még nem kezdte",
+        cegnev: "Axon Cable"
+    },
+    {
+        id: 10,
+        nev: "Németh Luca",
+        szak: "Logisztika",
+        status: "Folyamatban",
+        cegnev: "Hell Energy"
+    }
+];
