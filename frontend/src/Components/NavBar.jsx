@@ -1,6 +1,6 @@
 import React from "react";
 
-function NavBar() {
+function NavBar({ onLogout }) {
     return (
     <div className="navbar bg-base-100 shadow-sm">
   <div className="navbar-start">
@@ -24,7 +24,7 @@ function NavBar() {
     </ul>
   </div>
   <div className="navbar-end">
-    <a className="btn">Bejelentkezés</a>
+    <button onClick={onLogout} className="btn">Kijelentkezés</button>
   </div>
 </div>
 )
