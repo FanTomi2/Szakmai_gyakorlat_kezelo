@@ -1,11 +1,13 @@
-import React from 'react';
+import React from "react";
 
-function HallgatoTable({ adat }) {
+function HallgatoTable({ adat, onOpenDetails }) {
     const getBadgeClass = (status) => {
         const normalizedStatus = status?.trim().toUpperCase();
-        if (normalizedStatus === "FOLYAMATBAN") return "badge-info text-info-content";
-        if (normalizedStatus === "BEFEJEZETT") return "badge-success text-success-content";
-        return "badge-error text-error-content"; 
+        if (normalizedStatus === "FOLYAMATBAN")
+            return "badge-info text-info-content";
+        if (normalizedStatus === "BEFEJEZETT")
+            return "badge-success text-success-content";
+        return "badge-error text-error-content";
     };
 
     return (
@@ -27,12 +29,19 @@ function HallgatoTable({ adat }) {
                             <td>{hallgato.szak}</td>
                             <td>{hallgato.cegnev}</td>
                             <td>
-                                <div className={`badge ${getBadgeClass(hallgato.status)} text-[10px] uppercase font-bold whitespace-nowrap`}>
+                                <div
+                                    className={`badge ${getBadgeClass(hallgato.status)} text-[10px] uppercase font-bold whitespace-nowrap`}
+                                >
                                     {hallgato.status}
                                 </div>
                             </td>
                             <td className="text-right">
-                                <button className="btn btn-sm btn-outline">Részletek</button>
+                                <button
+                                    className="btn btn-sm btn-outline"
+                                    onClick={() => onOpenDetails(hallgato)}
+                                >
+                                    Részletek
+                                </button>
                             </td>
                         </tr>
                     ))}

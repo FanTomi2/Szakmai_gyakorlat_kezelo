@@ -4,69 +4,69 @@ export const MockData = [
         nev: "Kis Pista",
         szak: "Mérnökinformatika",
         status: "Folyamatban",
-        cegnev: "Mercedes-Benz"
+        cegnev: "Mercedes-Benz",
     },
     {
         id: 2,
         nev: "Nagy Anna",
         szak: "Logisztika",
         status: "Befejezett",
-        cegnev: "Knorr-Bremse"
+        cegnev: "Knorr-Bremse",
     },
     {
         id: 3,
         nev: "Kovács Béla",
         szak: "Gépészmérnök",
         status: "Még nem kezdte",
-        cegnev: "Mercedes-Benz"
+        cegnev: "Mercedes-Benz",
     },
     {
         id: 4,
         nev: "Szabó Eszter",
         szak: "Járműmérnök",
         status: "Folyamatban",
-        cegnev: "Bosch"
+        cegnev: "Bosch",
     },
     {
         id: 5,
         nev: "Tóth Gábor",
         szak: "Mérnökinformatika",
         status: "Befejezett",
-        cegnev: "Mirelite Mirsa"
+        cegnev: "Mirelite Mirsa",
     },
     {
         id: 6,
         nev: "Horváth Lili",
         szak: "Logisztika",
         status: "Még nem kezdte",
-        cegnev: "Duvenbeck"
+        cegnev: "Duvenbeck",
     },
     {
         id: 7,
         nev: "Varga Zoltán",
         szak: "Gépészmérnök",
         status: "Folyamatban",
-        cegnev: "Phoenix Mecano"
+        cegnev: "Phoenix Mecano",
     },
     {
         id: 8,
         nev: "Molnár Dóra",
         szak: "Járműmérnök",
         status: "Befejezett",
-        cegnev: "Mercedes-Benz"
+        cegnev: "Mercedes-Benz",
     },
     {
         id: 9,
         nev: "Fekete Péter",
         szak: "Mérnökinformatika",
         status: "Még nem kezdte",
-        cegnev: "Axon Cable"
+        cegnev: "Axon Cable",
     },
     {
         id: 10,
         nev: "Németh Luca",
         szak: "Logisztika",
         status: "Folyamatban",
-        cegnev: "Hell Energy"
-    }
+        cegnev: "Hell Energy",
+    },
 ];
