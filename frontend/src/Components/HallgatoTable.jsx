@@ -1,40 +1,28 @@
 import React from "react";
 
 function HallgatoTable({ adat, onOpenDetails }) {
-    const getBadgeClass = (status) => {
-        const normalizedStatus = status?.trim().toUpperCase();
-        if (normalizedStatus === "FOLYAMATBAN")
-            return "badge-info text-info-content";
-        if (normalizedStatus === "BEFEJEZETT")
-            return "badge-success text-success-content";
-        return "badge-error text-error-content";
-    };
-
+    console.log(adat);
     return (
         <div className="overflow-x-auto bg-base-100 rounded-box shadow-sm border border-base-200">
             <table className="table table-zebra w-full">
                 <thead className="bg-base-200 text-base-content text-sm">
                     <tr>
                         <th>Név</th>
+                        <th>Neptun kód</th>
                         <th>Szak</th>
                         <th>Cég</th>
-                        <th>Státusz</th>
+                        <th>Szakmai gyakorlat Teljesítési módja</th>
                         <th className="text-right">Műveletek</th>
                     </tr>
                 </thead>
                 <tbody>
                     {adat.map((hallgato) => (
-                        <tr key={hallgato.id} className="hover">
+                        <tr key={hallgato.neptunId} className="hover">
                             <td className="font-bold">{hallgato.nev}</td>
-                            <td>{hallgato.szak}</td>
-                            <td>{hallgato.cegnev}</td>
-                            <td>
-                                <div
-                                    className={`badge ${getBadgeClass(hallgato.status)} text-[10px] uppercase font-bold whitespace-nowrap`}
-                                >
-                                    {hallgato.status}
-                                </div>
-                            </td>
+                            <td>{hallgato.neptunId}</td>
+                            <td>{hallgato.kepzesek[0]?.szakNev}</td>
+                            <td>{hallgato.cegNev}</td>
+                            <td>{hallgato.kepzesek[0]?.szakmaiGyakTelj}</td>
                             <td className="text-right">
                                 <button
                                     className="btn btn-sm btn-outline"

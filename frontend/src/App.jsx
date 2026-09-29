@@ -1,16 +1,36 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NavBar from "./components/NavBar";
-import HallgatoCard from "./components/HallgatoCard";
 import HallgatoTable from "./components/HallgatoTable";
 import LoginPage from "./Pages/LoginPage.jsx";
 import HallgatoModal from "./Components/HallgatoModal.jsx";
 import { MockData } from "./data/MockData.js";
+import { fetchHallgatok } from "./services/hallgatoServices.js";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [viewMode, setViewMode] = useState("grid");
     const [showToast, setShowToast] = useState(false);
     const [selectedHallgato, setSelectedHallgato] = useState(null);
+    const [hallgatok, setHakkgatok] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const adatBetoltes = async () => {
+            try {
+                setLoading(true);
+                const data = await fetchHallgatok();
+                setHakkgatok(data);
+            } catch (err) {
+                setError('Sikertelen betöltés!');
+            } finally {
+                setLoading(false);
+            }
+        };
+        adatBetoltes();
+    }, []);
+
+    if (loading) return <p>Adatok betöltése folyamatban</p>
+    if (error) return <p style={{color: 'red'}}>{error}</p>
 
     const handleLogout = () => {
         setIsLoggedIn(false);
@@ -61,44 +81,13 @@ function App() {
                     <h2 className="text-2xl font-bold text-gray-800">
                         Hallgatók listája
                     </h2>
-                    {/* Nézetváltó*/}
-                    <div className="join bg-blue-100 shadow-sm border border-base-200">
-                        <button
-                            className={`join-item btn btn-sm ${viewMode === "grid" ? "btn-neutral bg-blue-800" : "btn-ghost"}`}
-                            onClick={() => setViewMode("grid")}
-                        >
-                            Kártyák
-                        </button>
-                        <button
-                            className={`join-item btn btn-sm ${viewMode === "table" ? "btn-neutral bg-blue-800" : "btn-ghost"}`}
-                            onClick={() => setViewMode("table")}
-                        >
-                            Táblázat
-                        </button>
-                    </div>
                 </div>
-                {viewMode === "grid" ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                        {MockData.map((hallgato) => (
-                            <HallgatoCard
-                                key={hallgato.id}
-                                nev={hallgato.nev}
-                                szak={hallgato.szak}
-                                cegnev={hallgato.cegnev}
-                                status={hallgato.status}
-                                hallgato={hallgato}
-                                onOpenDetails={setSelectedHallgato}
-                            />
-                        ))}
-                    </div>
-                ) : (
                     <HallgatoTable
-                        adat={MockData}
+                        adat={hallgatok}
                         onOpenDetails={(hallgato) =>
                             setSelectedHallgato(hallgato)
                         }
                     />
-                )}
                 <HallgatoModal
                     hallgato={selectedHallgato}
                     onClose={() => setSelectedHallgato(null)}
