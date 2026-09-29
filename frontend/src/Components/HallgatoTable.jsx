@@ -1,31 +1,33 @@
 import React from "react";
 
 function HallgatoTable({ adat, onOpenDetails }) {
-    console.log(adat);
     return (
-        <div className="overflow-x-auto bg-base-100 rounded-box shadow-sm border border-base-200">
-            <table className="table table-zebra w-full">
-                <thead className="bg-base-200 text-base-content text-sm">
+        <div className="overflow-x-auto bg-white rounded shadow-lg border border-gray-400">
+            <table className="table w-full text-center border-collapse">
+                <thead className="bg-gray-300 text-blue-900 text-sm border-b-2 border-black-300">
                     <tr>
-                        <th>Név</th>
-                        <th>Neptun kód</th>
-                        <th>Szak</th>
-                        <th>Cég</th>
-                        <th>Szakmai gyakorlat Teljesítési módja</th>
-                        <th className="text-right">Műveletek</th>
+                        <th className="font-semibold px-4 py-4">Név</th>
+                        <th className="font-semibold px-4 py-4">Neptun kód</th>
+                        <th className="font-semibold px-4 py-4">Szak</th>
+                        <th className="font-semibold px-4 py-4">Cég</th>
+                        <th className="font-semibold px-4 py-4">Szakmai gyakorlat Teljesítési módja</th>
+                        <th className="font-semibold px-4 py-4 text-right">Műveletek</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-gray-400">
                     {adat.map((hallgato) => (
-                        <tr key={hallgato.neptunId} className="hover">
-                            <td className="font-bold">{hallgato.nev}</td>
-                            <td>{hallgato.neptunId}</td>
-                            <td>{hallgato.kepzesek[0]?.szakNev}</td>
-                            <td>{hallgato.cegNev}</td>
-                            <td>{hallgato.kepzesek[0]?.szakmaiGyakTelj}</td>
-                            <td className="text-right">
+                        <tr 
+                            key={hallgato.neptunId}
+                            className="odd:bg-white even:bg-gray-200"
+                        >
+                            <td className="px-4 py-3 font-bold text-slate-800">{hallgato.nev}</td>
+                            <td className="px-4 py-3 text-slate-700 tracking-wider">{hallgato.neptunId}</td>
+                            <td className="px-4 py-3 text-slate-700">{hallgato.kepzesek[0]?.szakNev}</td>
+                            <td className="px-4 py-3 text-slate-700">{hallgato.cegNev}</td>
+                            <td className="px-4 py-3 text-slate-700">{hallgato.kepzesek[0]?.szakmaiGyakTelj}</td>
+                            <td className="px-4 py-3 text-right">
                                 <button
-                                    className="btn btn-sm btn-outline"
+                                    className="btn btn-sm bg-white text-blue-600 border-blue-300 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all shadow-sm"
                                     onClick={() => onOpenDetails(hallgato)}
                                 >
                                     Részletek
