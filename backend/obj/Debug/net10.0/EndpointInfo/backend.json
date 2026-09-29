@@ -1,0 +1,465 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "backend | v1",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://localhost:7064"
+    },
+    {
+      "url": "http://localhost:5181"
+    }
+  ],
+  "paths": {
+    "/WeatherForecast": {
+      "get": {
+        "tags": [
+          "WeatherForecast"
+        ],
+        "operationId": "GetWeatherForecast",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Hallgatok": {
+      "get": {
+        "tags": [
+          "Hallgatok"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Hallgato"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Hallgato"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Hallgato"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Hallgatok/reszletes": {
+      "get": {
+        "tags": [
+          "Hallgatok"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Hallgatok/statisztika/felevek": {
+      "get": {
+        "tags": [
+          "Hallgatok"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Hallgatok/statisztika/teljesites": {
+      "get": {
+        "tags": [
+          "Hallgatok"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Hallgatok/statisztika/teljmod": {
+      "get": {
+        "tags": [
+          "Hallgatok"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Ceg": {
+        "required": [
+          "nev"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "nev": {
+            "type": "string"
+          },
+          "hallgatok": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Hallgato"
+            }
+          }
+        }
+      },
+      "Felhasznalo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "email": {
+            "type": "string"
+          },
+          "jelszo": {
+            "type": "string"
+          },
+          "oktatoId": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "oktato": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Oktato"
+              }
+            ]
+          }
+        }
+      },
+      "Hallgato": {
+        "type": "object",
+        "properties": {
+          "neptunId": {
+            "type": "string"
+          },
+          "nev": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "kapcsolattarto": {
+            "type": "string"
+          },
+          "cegId": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "ceg": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Ceg"
+              }
+            ]
+          },
+          "kepzesek": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Kepzes"
+            }
+          }
+        }
+      },
+      "Kar": {
+        "required": [
+          "nev"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "nev": {
+            "type": "string"
+          },
+          "kepzesek": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Kepzes"
+            }
+          }
+        }
+      },
+      "Kepzes": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "teljesites": {
+            "type": "string"
+          },
+          "felevSzama": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "kepzesiSzint": {
+            "type": "string"
+          },
+          "szakmaiGyakTelj": {
+            "type": "string"
+          },
+          "neptunId": {
+            "type": "string"
+          },
+          "hallgato": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Hallgato"
+              }
+            ]
+          },
+          "karId": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "kar": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Kar"
+              }
+            ]
+          },
+          "szakId": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "szak": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Szak"
+              }
+            ]
+          }
+        }
+      },
+      "Oktato": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "nev": {
+            "type": "string"
+          },
+          "szakId": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "szak": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Szak"
+              }
+            ]
+          },
+          "felhasznalok": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Felhasznalo"
+            }
+          }
+        }
+      },
+      "Szak": {
+        "required": [
+          "nev"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "nev": {
+            "type": "string"
+          },
+          "kepzesek": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Kepzes"
+            }
+          },
+          "oktatok": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Oktato"
+            }
+          }
+        }
+      },
+      "WeatherForecast": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "temperatureC": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "temperatureF": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "summary": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "WeatherForecast"
+    },
+    {
+      "name": "Hallgatok"
+    }
+  ]
+}

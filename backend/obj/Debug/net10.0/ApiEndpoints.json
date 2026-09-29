@@ -1,0 +1,83 @@
+[
+  {
+    "ContainingType": "SzakdogaApi.Controllers.HallgatokController",
+    "Method": "GetHallgatok",
+    "RelativePath": "api/Hallgatok",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[backend.Models.Hallgato, backend, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SzakdogaApi.Controllers.HallgatokController",
+    "Method": "GetHallgatokReszletesen",
+    "RelativePath": "api/Hallgatok/reszletes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SzakdogaApi.Controllers.HallgatokController",
+    "Method": "GetFelevStatisztika",
+    "RelativePath": "api/Hallgatok/statisztika/felevek",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SzakdogaApi.Controllers.HallgatokController",
+    "Method": "GetKepzesTeljesitesStatisztika",
+    "RelativePath": "api/Hallgatok/statisztika/teljesites",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SzakdogaApi.Controllers.HallgatokController",
+    "Method": "GetTeljesitesModStatisztika",
+    "RelativePath": "api/Hallgatok/statisztika/teljmod",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backend.Controllers.WeatherForecastController",
+    "Method": "Get",
+    "RelativePath": "WeatherForecast",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[backend.WeatherForecast, backend, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "EndpointName": "GetWeatherForecast"
+  }
+]
