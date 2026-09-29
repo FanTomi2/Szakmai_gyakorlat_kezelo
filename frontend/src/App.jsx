@@ -13,6 +13,27 @@ function App() {
     const [hallgatok, setHakkgatok] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [mutatGomb, setMutatGomb] = useState(false);
+
+    useEffect(() => {
+        const gorgetesFigyelo = () => {
+            if(window.scrollY > 300) {
+                setMutatGomb(true);
+            } else {
+                setMutatGomb(false);
+            }
+        };
+
+        window.addEventListener('scroll', gorgetesFigyelo);
+        return () => window.removeEventListener('scroll', gorgetesFigyelo);
+    }, []);
+
+    const tetejere = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }    
 
     useEffect(() => {
         const adatBetoltes = async () => {
@@ -29,9 +50,6 @@ function App() {
         adatBetoltes();
     }, []);
 
-    if (loading) return <p>Adatok betöltése folyamatban</p>
-    if (error) return <p style={{color: 'red'}}>{error}</p>
-
     const handleLogout = () => {
         setIsLoggedIn(false);
         setShowToast(true);
@@ -41,6 +59,8 @@ function App() {
     };
 
     if (!isLoggedIn) {
+        if (loading) return <p>Adatok betöltése folyamatban</p>
+        if (error) return <p style={{color: 'red'}}>{error}</p>
         return (
             <>
                 {showToast && (
@@ -93,6 +113,28 @@ function App() {
                     onClose={() => setSelectedHallgato(null)}
                 />
             </main>
+            {mutatGomb && (
+                <button
+                    onClick={tetejere}
+                    className="btn btn-circle btn-primary fixed bottom-6 right-6 z-50 shadow-xl transition-all duration-300"
+                    title="Ugrás az oldal tetejére"
+                >
+                    <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        className="h-6 w-6" 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor"
+                    >
+                        <path 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round" 
+                            strokeWidth="2.5" 
+                            d="M5 10l7-7m0 0l7 7m-7-7v18" 
+                        />
+                    </svg>
+                </button>
+            )}
         </div>
     );
 }
