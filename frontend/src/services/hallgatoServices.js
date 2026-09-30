@@ -18,7 +18,7 @@ export const fetchHallgatok = async () => {
 
 export const fetchFelevStat = async () => {
     try {
-        const response = await fetch(`${BASE_URL}/Hallgatok/statisztika/felevek`);
+        const response = await fetch(`${BASE_URL}Hallgatok/statisztika/felevek`);
         
         if (!response.ok) {
             throw new Error(`Szerver hiba történt: ${response.status}`);
@@ -34,7 +34,7 @@ export const fetchFelevStat = async () => {
 
 export const fetchTeljesitesStat = async () => {
     try {
-        const response = await fetch(`${BASE_URL}/Hallgatok/statisztika/teljesites`);
+        const response = await fetch(`${BASE_URL}Hallgatok/statisztika/teljesites`);
         
         if (!response.ok) {
             throw new Error(`Szerver hiba történt: ${response.status}`);
@@ -50,7 +50,7 @@ export const fetchTeljesitesStat = async () => {
 
 export const fetchTeljModStat = async () => {
     try {
-        const response = await fetch(`${BASE_URL}/Hallgatok/statisztika/teljmod`);
+        const response = await fetch(`${BASE_URL}Hallgatok/statisztika/teljmod`);
         
         if (!response.ok) {
             throw new Error(`Szerver hiba történt: ${response.status}`);
@@ -62,4 +62,25 @@ export const fetchTeljModStat = async () => {
         console.error("hiba az adatok lekérdezésekor: ", error);
         throw error;
     }    
+}
+
+export const createHallgato = async (hallgatoData) => {
+    try {
+        const response = await fetch(`${BASE_URL}Hallgatok`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(hallgatoData)
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText || `Szerver hiba történt: ${response.status}`);
+        }
+        
+        return await response.json();
+    } catch (error) {
+        throw error;
+    }
 }

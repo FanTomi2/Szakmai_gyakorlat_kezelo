@@ -8,7 +8,7 @@ function HallgatoTable({ adat, onOpenDetails }) {
                     <tr>
                         <th className="font-semibold px-4 py-4">Név</th>
                         <th className="font-semibold px-4 py-4">Neptun kód</th>
-                        <th className="font-semibold px-4 py-4">Szak</th>
+                        <th className="font-semibold px-4 py-4">Félév</th>
                         <th className="font-semibold px-4 py-4">Cég</th>
                         <th className="font-semibold px-4 py-4">Szakmai gyakorlat Teljesítési módja</th>
                         <th className="font-semibold px-4 py-4 text-right">Műveletek</th>
@@ -22,7 +22,7 @@ function HallgatoTable({ adat, onOpenDetails }) {
                         >
                             <td className="px-4 py-3 font-bold text-slate-800">{hallgato.nev}</td>
                             <td className="px-4 py-3 text-slate-700 tracking-wider">{hallgato.neptunId}</td>
-                            <td className="px-4 py-3 text-slate-700">{hallgato.kepzesek[0]?.szakNev}</td>
+                            <td className="px-4 py-3 text-slate-700">{hallgato.kepzesek[0]?.felevSzama}</td>
                             <td className="px-4 py-3 text-slate-700">{hallgato.cegNev}</td>
                             <td className="px-4 py-3 text-slate-700">{hallgato.kepzesek[0]?.szakmaiGyakTelj}</td>
                             <td className="px-4 py-3 text-right">

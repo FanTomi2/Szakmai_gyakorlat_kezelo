@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using backend.Data;
 using backend.Models;
+using backend.DTO;
 
 namespace SzakdogaApi.Controllers
 {
@@ -18,7 +19,7 @@ namespace SzakdogaApi.Controllers
             _context = context;
         }
 
-        // GET: api/Hallgatok
+        // csak hallgatok
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Hallgato>>> GetHallgatok()
         {
@@ -26,7 +27,7 @@ namespace SzakdogaApi.Controllers
             return Ok(hallgatok);
         }
 
-        // GET: api/Hallgatok/reszletes
+        // Hallgatok összekötött táblákkal
         [HttpGet("reszletes")]
         public async Task<IActionResult> GetHallgatokReszletesen()
         {
@@ -61,7 +62,7 @@ namespace SzakdogaApi.Controllers
             return Ok(hallgatok);
         }
 
-        // GET: api/Hallgatok/statisztika/felevek
+        // Felevek szama
         [HttpGet("statisztika/felevek")]
         public async Task<IActionResult> GetFelevStatisztika()
         {
@@ -78,6 +79,7 @@ namespace SzakdogaApi.Controllers
             return Ok(statisztika);
         }
 
+        //nappali levelezo szama
         [HttpGet("statisztika/teljesites")]
         public async Task<IActionResult> GetKepzesTeljesitesStatisztika() 
         {
@@ -93,6 +95,7 @@ namespace SzakdogaApi.Controllers
             return Ok(statisztika);
         }
 
+        //Gyak teljesitesi mod szama
         [HttpGet("statisztika/teljmod")]
         public async Task<IActionResult> GetTeljesitesModStatisztika()
         {
@@ -106,6 +109,57 @@ namespace SzakdogaApi.Controllers
                 .OrderBy(x => x.Teljesitesmod)
                 .ToListAsync();
             return Ok(statisztika);
+        }
+
+        //uj hallgato
+        [HttpPost]
+        public async Task<IActionResult> PostHallgato([FromBody] UjHallgatoDto dto)
+        {
+            if (await _context.Hallgatok.AnyAsync(h => h.NeptunId == dto.NeptunId.ToUpper()))
+            {
+                return BadRequest("Már létezik ilyen neptun kód");
+            }
+
+            var letezikCeg = await _context.Cegek
+                .FirstOrDefaultAsync(c => c.Nev.ToLower() == dto.CegNev.ToLower());
+
+            int veglegesCegId;
+            if (letezikCeg != null)
+            {
+                veglegesCegId = letezikCeg.Id;
+            } else
+            {
+                var ujCeg = new Ceg { Nev = dto.CegNev };
+                _context.Cegek.Add(ujCeg);
+                await _context.SaveChangesAsync();
+                veglegesCegId = ujCeg.Id;
+            }
+
+            var ujHallgato = new Hallgato
+            {
+                NeptunId = dto.NeptunId.ToUpper(),
+                Nev = dto.nev,
+                Email = dto.email,
+                Kapcsolattarto = dto.kapcsolattarto,
+                CegId = veglegesCegId
+            };
+
+            var ujKepzes = new Kepzes
+            {
+                NeptunId = dto.NeptunId.ToUpper(),
+                KarId = 1,
+                SzakId = dto.SzakId,
+                Teljesites = dto.Teljesites,
+                FelevSzama = dto.FelevSzama,
+                KepzesiSzint = dto.KepzesiSzint,
+                SzakmaiGyakTelj = dto.SzakmaiGyakTelj
+            };
+
+            _context.Hallgatok.Add(ujHallgato);
+            _context.Kepzesek.Add(ujKepzes);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Hallgató sikeresen rögzítve!" });
         }
     }
 }

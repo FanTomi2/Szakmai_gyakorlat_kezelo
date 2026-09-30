@@ -21,6 +21,22 @@
   },
   {
     "ContainingType": "SzakdogaApi.Controllers.HallgatokController",
+    "Method": "PostHallgato",
+    "RelativePath": "api/Hallgatok",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "backend.DTO.UjHallgatoDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SzakdogaApi.Controllers.HallgatokController",
     "Method": "GetHallgatokReszletesen",
     "RelativePath": "api/Hallgatok/reszletes",
     "HttpMethod": "GET",

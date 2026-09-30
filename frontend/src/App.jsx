@@ -5,15 +5,17 @@ import LoginPage from "./Pages/LoginPage.jsx";
 import HallgatoModal from "./Components/HallgatoModal.jsx";
 import { MockData } from "./data/MockData.js";
 import { fetchHallgatok } from "./services/hallgatoServices.js";
+import UjHallgatoForm from "./Components/UjHallgatoForm.jsx";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showToast, setShowToast] = useState(false);
     const [selectedHallgato, setSelectedHallgato] = useState(null);
-    const [hallgatok, setHakkgatok] = useState([]);
+    const [hallgatok, setHallgatok] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [mutatGomb, setMutatGomb] = useState(false);
+    const [aktivNezet, setAktivNezet] = useState('lista');
 
     useEffect(() => {
         const gorgetesFigyelo = () => {
@@ -35,18 +37,19 @@ function App() {
         });
     }    
 
+    const adatBetoltes = async () => {
+        try {
+            setLoading(true);
+            const data = await fetchHallgatok();
+            setHallgatok(data);
+        } catch (err) {
+            setError('Sikertelen betöltés!');
+        } finally {
+            setLoading(false);
+        }
+    };
+    
     useEffect(() => {
-        const adatBetoltes = async () => {
-            try {
-                setLoading(true);
-                const data = await fetchHallgatok();
-                setHakkgatok(data);
-            } catch (err) {
-                setError('Sikertelen betöltés!');
-            } finally {
-                setLoading(false);
-            }
-        };
         adatBetoltes();
     }, []);
 
@@ -59,8 +62,6 @@ function App() {
     };
 
     if (!isLoggedIn) {
-        if (loading) return <p>Adatok betöltése folyamatban</p>
-        if (error) return <p style={{color: 'red'}}>{error}</p>
         return (
             <>
                 {showToast && (
@@ -91,52 +92,70 @@ function App() {
                 />
             </>
         );
-    }
-    return (
-        <div className="min-h-screen flex flex-col bg-gray-50">
-            <NavBar onLogout={handleLogout} />
-            <main className="flex-grow max-w-7xl mx-auto p-6 w-full">
-                {/* Fejléc*/}
-                <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-                    <h2 className="text-2xl font-bold text-gray-800">
-                        Hallgatók listája
-                    </h2>
-                </div>
-                    <HallgatoTable
-                        adat={hallgatok}
-                        onOpenDetails={(hallgato) =>
-                            setSelectedHallgato(hallgato)
-                        }
+    } else {
+        if (loading) return <p>Adatok betöltése folyamatban</p>
+        if (error) return <p style={{color: 'red'}}>{error}</p>
+        return (
+            <div className="min-h-screen flex flex-col bg-gray-50">
+                <NavBar onLogout={handleLogout} />
+                <main className="flex-grow max-w-7xl mx-auto p-6 w-full">
+                    {aktivNezet === 'lista' ? (
+                    <>
+                        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+                            <h2 className="text-2xl font-bold text-gray-800">Hallgatók listája</h2>
+                            <button 
+                                onClick={() => setAktivNezet('uj_hallgato')}
+                                className="btn bg-blue-600 text-white hover:bg-blue-700 border-none shadow-sm"
+                            >
+                                + Új hallgató
+                            </button>
+                        </div>
+                        
+                        <HallgatoTable
+                            adat={hallgatok}
+                            onOpenDetails={(hallgato) => setSelectedHallgato(hallgato)}
+                        />
+                    </>
+                ) : (
+                    <UjHallgatoForm 
+                        onVissza={() => setAktivNezet('lista')}
+                        onSikeresMentes={() => {
+                            setAktivNezet('lista');
+                            adatBetoltes();
+                        }}
                     />
+                )}
+
                 <HallgatoModal
                     hallgato={selectedHallgato}
                     onClose={() => setSelectedHallgato(null)}
                 />
             </main>
-            {mutatGomb && (
-                <button
-                    onClick={tetejere}
-                    className="btn btn-circle btn-primary fixed bottom-6 right-6 z-50 shadow-xl transition-all duration-300"
-                    title="Ugrás az oldal tetejére"
-                >
-                    <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        className="h-6 w-6" 
-                        fill="none" 
-                        viewBox="0 0 24 24" 
-                        stroke="currentColor"
+                {mutatGomb && (
+                    <button
+                        onClick={tetejere}
+                        className="btn btn-circle btn-primary fixed bottom-6 right-6 z-50 shadow-xl transition-all duration-300"
+                        title="Ugrás az oldal tetejére"
                     >
-                        <path 
-                            strokeLinecap="round" 
-                            strokeLinejoin="round" 
-                            strokeWidth="2.5" 
-                            d="M5 10l7-7m0 0l7 7m-7-7v18" 
-                        />
-                    </svg>
-                </button>
-            )}
-        </div>
+                        <svg 
+                            xmlns="http://www.w3.org/2000/svg" 
+                            className="h-6 w-6" 
+                            fill="none" 
+                            viewBox="0 0 24 24" 
+                            stroke="currentColor"
+                        >
+                            <path 
+                                strokeLinecap="round" 
+                                strokeLinejoin="round" 
+                                strokeWidth="2.5" 
+                                d="M5 10l7-7m0 0l7 7m-7-7v18" 
+                            />
+                        </svg>
+                    </button>
+                )}
+            </div>
     );
+    }
 }
 
 export default App;

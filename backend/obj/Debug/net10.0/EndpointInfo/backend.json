@@ -88,6 +88,36 @@
             }
           }
         }
+      },
+      "post": {
+        "tags": [
+          "Hallgatok"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UjHallgatoDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UjHallgatoDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UjHallgatoDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
     "/api/Hallgatok/reszletes": {
@@ -418,6 +448,51 @@
             "items": {
               "$ref": "#/components/schemas/Oktato"
             }
+          }
+        }
+      },
+      "UjHallgatoDto": {
+        "type": "object",
+        "properties": {
+          "neptunId": {
+            "type": "string"
+          },
+          "nev": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "kapcsolattarto": {
+            "type": "string"
+          },
+          "cegNev": {
+            "type": "string"
+          },
+          "szakId": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "teljesites": {
+            "type": "string"
+          },
+          "felevSzama": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "kepzesiSzint": {
+            "type": "string"
+          },
+          "szakmaiGyakTelj": {
+            "type": "string"
           }
         }
       },
