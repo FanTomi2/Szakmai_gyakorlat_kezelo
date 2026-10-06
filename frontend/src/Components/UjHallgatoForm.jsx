@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { createHallgato } from "../services/hallgatoServices";
+import { useState, useEffect } from "react";
+import { createHallgato, updateHallgato } from "../services/hallgatoServices";
 
-function UjHallgatoForm({onVissza, onSikeresMentes}) {
+function UjHallgatoForm({onVissza, onSikeresMentes, szerkesztendoAdat}) {
     const [formData, setFormData] = useState({
         neptunId: '',
         nev: '',
@@ -16,6 +16,23 @@ function UjHallgatoForm({onVissza, onSikeresMentes}) {
     });
     const [hiba, setHiba] = useState('');
     const [mentesFolyamatban, setMentesFolyamatban] = useState(false);
+
+    useEffect(() => {
+        if (szerkesztendoAdat) {
+            setFormData({
+                neptunId: szerkesztendoAdat.neptunId,
+                nev: szerkesztendoAdat.nev,
+                email: szerkesztendoAdat.email,
+                kapcsolattarto: szerkesztendoAdat.kapcsolattarto || '',
+                cegNev: szerkesztendoAdat.cegNev,
+                szakId: szerkesztendoAdat.kepzesek?.[0]?.szakId || 3,
+                teljesites: szerkesztendoAdat.kepzesek?.[0]?.teljesites || 'nappali',
+                felevSzama: szerkesztendoAdat.kepzesek?.[0]?.felevSzama || 7,
+                kepzesiSzint: szerkesztendoAdat.kepzesek?.[0]?.kepzesiSzint || 'Bsc',
+                szakmaiGyakTelj: szerkesztendoAdat.kepzesek?.[0]?.szakmaiGyakTelj || 'kurzus teljesítés'
+            });
+        }
+    }, [szerkesztendoAdat]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -34,8 +51,20 @@ function UjHallgatoForm({onVissza, onSikeresMentes}) {
                 felevSzama: parseInt(formData.felevSzama)
             };
 
-            await createHallgato(kuldoAdat);
-            onSikeresMentes(); 
+            if (szerkesztendoAdat) {
+                console.log("4/A. Módosítás (PUT) indítása...");
+                await updateHallgato(szerkesztendoAdat.neptunId, kuldoAdat);
+            } else {
+                console.log("4/B. Új létrehozása (POST) indítása...");
+                await createHallgato(kuldoAdat);
+            }
+            
+            if (onSikeresMentes) {
+                onSikeresMentes();
+            } else {
+                console.error("HIBA: Nincs onSikeresMentes függvény átadva az űrlapnak!");
+            }
+            
         } catch (err) {
             setHiba(err.message || 'Sikertelen mentés. Ellenőrizd az adatokat!');
         } finally {
@@ -45,7 +74,9 @@ function UjHallgatoForm({onVissza, onSikeresMentes}) {
 
     return (
         <div className="bg-white p-8 rounded-xl shadow-lg border border-blue-200">
-            <h2 className="text-2xl font-bold text-slate-800 mb-6 border-b pb-2">Új hallgató felvétele</h2>
+            <h2 className="text-2xl font-bold text-slate-800 mb-6 border-b pb-2">
+                {szerkesztendoAdat ? 'Hallgató adatainak módosítása' : 'Új hallgató felvétele'}
+            </h2>
             
             {hiba && <div className="alert alert-error mb-4 text-white">{hiba}</div>}
 
@@ -55,23 +86,33 @@ function UjHallgatoForm({onVissza, onSikeresMentes}) {
                     <h3 className="font-semibold text-blue-800">Alapadatok</h3>
                     <div>
                         <label className="label font-bold">Neptun kód</label>
-                        <input type="text" name="neptunId" value={formData.neptunId} onChange={handleChange} required maxLength="6" className="input input-bordered w-full uppercase" placeholder="Pl: ABC123" />
+                        <input type="text" name="neptunId" value={formData.neptunId} onChange={handleChange} required maxLength="6" 
+                        className={`input input-bordered w-full uppercase ${szerkesztendoAdat ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                        placeholder="Pl: ABC123" />
                     </div>
                     <div>
                         <label className="label font-bold">Név</label>
-                        <input type="text" name="nev" value={formData.nev} onChange={handleChange} required className="input input-bordered w-full" placeholder="Pl: Kovács János"/>
+                        <input type="text" name="nev" value={formData.nev} onChange={handleChange} required
+                            className={"input input-bordered w-full p-2"}
+                            placeholder="Pl: Kovács János"/>
                     </div>
                     <div>
                         <label className="label font-bold">Email</label>
-                        <input type="email" name="email" value={formData.email} onChange={handleChange} required className="input input-bordered w-full" placeholder="nev@nje.hallgato.hu"/>
+                        <input type="email" name="email" value={formData.email} onChange={handleChange} required 
+                            className={"input input-bordered w-full p-2"}
+                            placeholder="nev@nje.hallgato.hu"/>
                     </div>
                     <div>
                         <label className="label font-bold">Gyakorlati Cég neve</label>
-                        <input type="text" name="cegNev" value={formData.cegNev} onChange={handleChange} required className="input input-bordered w-full" placeholder="Pl: Audi Hungaria Zrt." />
+                        <input type="text" name="cegNev" value={formData.cegNev} onChange={handleChange} required 
+                            className={"input input-bordered w-full p-2"}
+                            placeholder="Pl: Audi Hungaria Zrt." />
                     </div>
                     <div>
                         <label className="label font-bold">Kapcsolattartó</label>
-                        <input type="text" name="kapcsolattarto" value={formData.kapcsolattarto} onChange={handleChange} required className="input input-bordered w-full" placeholder="Pl: Varga Zoltán (HR)" />
+                        <input type="text" name="kapcsolattarto" value={formData.kapcsolattarto} onChange={handleChange} required
+                            className={"input input-bordered w-full p-2"}
+                            placeholder="Pl: Varga Zoltán (HR)" />
                     </div>
                 </div>
 

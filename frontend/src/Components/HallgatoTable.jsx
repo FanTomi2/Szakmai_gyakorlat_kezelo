@@ -11,7 +11,7 @@ function HallgatoTable({ adat, onOpenDetails }) {
                         <th className="font-semibold px-4 py-4">Félév</th>
                         <th className="font-semibold px-4 py-4">Cég</th>
                         <th className="font-semibold px-4 py-4">Szakmai gyakorlat Teljesítési módja</th>
-                        <th className="font-semibold px-4 py-4 text-right">Műveletek</th>
+                        <th className="font-semibold px-4 py-4 text-right">Részletek</th>
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-400">

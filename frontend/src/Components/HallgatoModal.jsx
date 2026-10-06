@@ -1,7 +1,29 @@
-import React from "react";
+import { useState } from "react";
+import { deleteHallgato } from "../services/hallgatoServices";
 
-function HallgatoModal({ hallgato, onClose }) {
+function HallgatoModal({ hallgato, onClose, onSikeresTorles, onEdit }) {
+    const [torlesFolyamatban, setTorlesFolyamatban] = useState(false);
+    const [hiba, setHiba] = useState('');
+
     if (!hallgato) return null;
+
+    const handleTorles = async () => {
+        const megerositve = window.confirm(`Biztosan törölni szeretnéd a következő hallgatót: ${hallgato.nev} (${hallgato.neptunId})?`);
+
+        if (!megerositve) return;
+
+        try {
+            setTorlesFolyamatban(true);
+            setHiba('');
+            await deleteHallgato(hallgato.neptunId);
+            onSikeresTorles();
+        } catch (err) {
+            setHiba(err.message || 'Sikertelen törlés!');
+        } finally {
+            setTorlesFolyamatban(false);
+        }
+    };
+
     return (
         <div className="modal modal-open z-50">
             <div className="modal-box max-w-5xl">
@@ -58,10 +80,33 @@ function HallgatoModal({ hallgato, onClose }) {
                     </div>
                 </div>
 
-                <div className="modal-action mt-6 border-t pt-4">
-                    <button className="btn btn-outline btn-error hover:bg-red-500" onClick={onClose}>
-                        Bezárás
-                    </button>
+                <div className="modal-action flex justify-between">
+                    <div className="modal-action felx ">
+                        <button
+                            type="button"
+                            onClick={onEdit}
+                            className="btn bg-blue-600 text-white hover:bg-blue-700 border-none"
+                        >
+                            Szerkesztés
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleTorles}
+                            disabled={torlesFolyamatban}
+                            className="btn bg-red-600 text-white hover:bg-red-700 border-none"
+                        >
+                            {torlesFolyamatban ? 'Törlés folyamatban...' : 'Hallgató törlése'}
+                        </button>
+                    </div>
+                    <div className="modal-action felx">
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="btn btn-neutral btn-outline"
+                        >
+                            Bezárás
+                        </button>
+                    </div>
                 </div>
             </div>
             <div className="modal-backdrop bg-black/40" onClick={onClose}></div>

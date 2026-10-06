@@ -161,5 +161,69 @@ namespace SzakdogaApi.Controllers
 
             return Ok(new { message = "Hallgató sikeresen rögzítve!" });
         }
+
+        //hallgato törlés
+        [HttpDelete("{neptunId}")]
+        public async Task<IActionResult> DeleteHallgato(string neptunId)
+        {
+            var kod = neptunId.ToUpper();
+            var hallgato = await _context.Hallgatok.FirstOrDefaultAsync(h => h.NeptunId == kod);
+
+            if (hallgato == null)
+            {
+                return NotFound(new { message = "A hallgató nem található!" });
+            }
+
+            var kepzesek = _context.Kepzesek.Where(k => k.NeptunId == kod);
+            _context.Kepzesek.RemoveRange(kepzesek);
+
+            _context.Hallgatok.Remove(hallgato);
+
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Hallgató sikeresen törölve!" });
+        }
+
+        //hallgato modositas
+        [HttpPut("{neptunId}")]
+        public async Task<IActionResult> PutHallgato(string neptunId, [FromBody] UjHallgatoDto dto)
+        {
+            var kod = neptunId.ToUpper();
+
+            var hallgato = await _context.Hallgatok
+                .Include(h => h.Kepzesek)
+                .FirstOrDefaultAsync(h => h.NeptunId == kod);
+
+            if (hallgato == null) return NotFound(new { message = "A hallgató nem található!" });
+
+            var letezikCeg = await _context.Cegek.FirstOrDefaultAsync(c => c.Nev.ToLower() == dto.CegNev.ToLower());
+            int veglegesCegId;
+
+            if (letezikCeg != null) veglegesCegId = letezikCeg.Id;
+            else
+            {
+                var ujCeg = new Ceg { Nev = dto.CegNev };
+                _context.Cegek.Add(ujCeg);
+                await _context.SaveChangesAsync();
+                veglegesCegId = ujCeg.Id;
+            }
+
+            hallgato.Nev = dto.nev;
+            hallgato.Email = dto.email;
+            hallgato.Kapcsolattarto = dto.kapcsolattarto;
+            hallgato.CegId = veglegesCegId;
+
+            var kepzes = hallgato.Kepzesek.FirstOrDefault();
+            if (kepzes != null)
+            {
+                kepzes.SzakId = dto.SzakId;
+                kepzes.Teljesites = dto.Teljesites;
+                kepzes.FelevSzama = dto.FelevSzama;
+                kepzes.KepzesiSzint = dto.KepzesiSzint;
+                kepzes.SzakmaiGyakTelj = dto.SzakmaiGyakTelj;
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Sikeres módosítás!" });
+        }
     }
 }

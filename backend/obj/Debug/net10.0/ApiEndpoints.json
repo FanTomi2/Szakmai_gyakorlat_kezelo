@@ -37,6 +37,43 @@
   },
   {
     "ContainingType": "SzakdogaApi.Controllers.HallgatokController",
+    "Method": "DeleteHallgato",
+    "RelativePath": "api/Hallgatok/{neptunId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "neptunId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SzakdogaApi.Controllers.HallgatokController",
+    "Method": "PutHallgato",
+    "RelativePath": "api/Hallgatok/{neptunId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "neptunId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "backend.DTO.UjHallgatoDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SzakdogaApi.Controllers.HallgatokController",
     "Method": "GetHallgatokReszletesen",
     "RelativePath": "api/Hallgatok/reszletes",
     "HttpMethod": "GET",

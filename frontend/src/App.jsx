@@ -16,6 +16,7 @@ function App() {
     const [error, setError] = useState(null);
     const [mutatGomb, setMutatGomb] = useState(false);
     const [aktivNezet, setAktivNezet] = useState('lista');
+    const [szerkesztendoHallgato, setSzerkesztendoHallgato] = useState(null);
 
     useEffect(() => {
         const gorgetesFigyelo = () => {
@@ -48,7 +49,7 @@ function App() {
             setLoading(false);
         }
     };
-    
+
     useEffect(() => {
         adatBetoltes();
     }, []);
@@ -104,7 +105,7 @@ function App() {
                         <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
                             <h2 className="text-2xl font-bold text-gray-800">Hallgatók listája</h2>
                             <button 
-                                onClick={() => setAktivNezet('uj_hallgato')}
+                                onClick={() => {setAktivNezet('uj_hallgato'); setSzerkesztendoHallgato(null)}}
                                 className="btn bg-blue-600 text-white hover:bg-blue-700 border-none shadow-sm"
                             >
                                 + Új hallgató
@@ -118,9 +119,14 @@ function App() {
                     </>
                 ) : (
                     <UjHallgatoForm 
-                        onVissza={() => setAktivNezet('lista')}
+                        szerkesztendoAdat={szerkesztendoHallgato}
+                        onVissza={() => {
+                            setAktivNezet('lista');
+                            setSzerkesztendoHallgato(null);
+                        }}
                         onSikeresMentes={() => {
                             setAktivNezet('lista');
+                            setSzerkesztendoHallgato(null);
                             adatBetoltes();
                         }}
                     />
@@ -129,6 +135,15 @@ function App() {
                 <HallgatoModal
                     hallgato={selectedHallgato}
                     onClose={() => setSelectedHallgato(null)}
+                    onSikeresTorles={() => {
+                        setSelectedHallgato(null);
+                        adatBetoltes();
+                    }}
+                    onEdit={() => {
+                        setSzerkesztendoHallgato(selectedHallgato);
+                        setSelectedHallgato(null);
+                        setAktivNezet('uj_hallgato');
+                    }}
                 />
             </main>
                 {mutatGomb && (

@@ -2,7 +2,9 @@ const BASE_URL = "https://localhost:7064/api/";
 
 export const fetchHallgatok = async () => {
     try {
-        const response = await fetch(`${BASE_URL}Hallgatok/reszletes`);
+        const response = await fetch(`${BASE_URL}Hallgatok/reszletes`, {
+            cache: 'no-store' 
+        });
         
         if (!response.ok) {
             throw new Error(`Szerver hiba történt: ${response.status}`);
@@ -64,6 +66,7 @@ export const fetchTeljModStat = async () => {
     }    
 }
 
+//uj hallgato
 export const createHallgato = async (hallgatoData) => {
     try {
         const response = await fetch(`${BASE_URL}Hallgatok`, {
@@ -84,3 +87,43 @@ export const createHallgato = async (hallgatoData) => {
         throw error;
     }
 }
+
+//hallgato törlés
+export const deleteHallgato = async (neptunId) => {
+    try {
+        const response = await fetch(`${BASE_URL}Hallgatok/${neptunId}`, {
+            method: 'DELETE'
+        });
+
+        if (!response.ok) {
+            throw new Error(`Szerver hiba történt a törléskor: ${response.status}`);
+        }
+
+        return true; 
+        
+    } catch (error) {
+        console.error("Hiba a törlés során:", error);
+        throw error;
+    }
+};
+
+//hallgato modositas
+export const updateHallgato = async (neptunId, hallgatoData) => {
+    try {
+        const response = await fetch(`${BASE_URL}Hallgatok/${neptunId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(hallgatoData)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Hiba történt a módosításkor: ${response.status}`);
+        }
+        return true; 
+    } catch (error) {
+        console.error("Hiba a módosítás során:", error);
+        throw error;
+    }
+};
