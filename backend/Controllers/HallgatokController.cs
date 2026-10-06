@@ -62,53 +62,57 @@ namespace SzakdogaApi.Controllers
             return Ok(hallgatok);
         }
 
-        // Felevek szama
-        [HttpGet("statisztika/felevek")]
-        public async Task<IActionResult> GetFelevStatisztika()
+        // Statisztika
+        [HttpGet("statisztika/dashboard")]
+        public async Task<IActionResult> GetDashboardStats()
         {
-            var statisztika = await _context.Kepzesek
-                .GroupBy(k => k.FelevSzama)
-                .Select(csoport => new
-                {
-                    Felev = csoport.Key,            
-                    HallgatoSzam = csoport.Count()
-                })
-                .OrderBy(x => x.Felev)
+            var hallgatok = await _context.Hallgatok
+                .Include(h => h.Kepzesek)
+                    .ThenInclude(k => k.Szak)
                 .ToListAsync();
 
-            return Ok(statisztika);
-        }
+            // Szakok eloszlásának kiszámolása
+            var szakok = hallgatok
+                .Where(h => h.Kepzesek.Any() && h.Kepzesek.First().Szak != null)
+                .GroupBy(h => h.Kepzesek.First().Szak.Nev)
+                .ToDictionary(g => g.Key, g => g.Count());
 
-        //nappali levelezo szama
-        [HttpGet("statisztika/teljesites")]
-        public async Task<IActionResult> GetKepzesTeljesitesStatisztika() 
-        {
-            var statisztika = await _context.Kepzesek
-                .GroupBy(k => k.Teljesites)
-                .Select(csoport => new
-                {
-                    kepzesTelj= csoport.Key,
-                    szama = csoport.Count()
-                })
-                .OrderBy(x => x.kepzesTelj)
-                .ToListAsync();
-            return Ok(statisztika);
-        }
+            // Félévek eloszlása
+            var felevek = hallgatok
+                .Where(h => h.Kepzesek.Any())
+                .GroupBy(h => h.Kepzesek.First().FelevSzama + ". félév")
+                .ToDictionary(g => g.Key, g => g.Count());
 
-        //Gyak teljesitesi mod szama
-        [HttpGet("statisztika/teljmod")]
-        public async Task<IActionResult> GetTeljesitesModStatisztika()
-        {
-            var statisztika = await _context.Kepzesek
-                .GroupBy(k => k.SzakmaiGyakTelj)
-                .Select(csoport => new
-                {
-                    Teljesitesmod = csoport.Key,
-                    szama = csoport.Count()
+            // Munkarend (nappali/levelező)
+            var munkarend = hallgatok
+                .Where(h => h.Kepzesek.Any())
+                .GroupBy(h => {
+                    var t = h.Kepzesek.First().Teljesites;
+                    return string.IsNullOrEmpty(t) ? "Ismeretlen" : char.ToUpper(t[0]) + t.Substring(1);
                 })
-                .OrderBy(x => x.Teljesitesmod)
-                .ToListAsync();
-            return Ok(statisztika);
+                .ToDictionary(g => g.Key, g => g.Count());
+
+            // Gyakorlat módja
+            var gyakMod = hallgatok
+                .Where(h => h.Kepzesek.Any())
+                .GroupBy(h => {
+                    var m = h.Kepzesek.First().SzakmaiGyakTelj;
+                    return string.IsNullOrEmpty(m) ? "Ismeretlen" : char.ToUpper(m[0]) + m.Substring(1);
+                })
+                .ToDictionary(g => g.Key, g => g.Count());
+
+            var stat = new
+            {
+                OsszesHallgato = hallgatok.Count,
+                AktivCegek = hallgatok.Where(h => h.CegId != null).Select(h => h.CegId).Distinct().Count(),
+                LegnepszerubbSzak = szakok.OrderByDescending(s => s.Value).FirstOrDefault().Key ?? "-",
+                SzakokEloszlasa = szakok,
+                FelevekEloszlasa = felevek.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value),
+                MunkarendEloszlasa = munkarend,
+                GyakorlatModEloszlasa = gyakMod
+            };
+
+            return Ok(stat);
         }
 
         //uj hallgato

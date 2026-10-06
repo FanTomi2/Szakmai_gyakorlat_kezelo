@@ -18,52 +18,22 @@ export const fetchHallgatok = async () => {
     }
 }
 
-export const fetchFelevStat = async () => {
+//Statisztika
+export const fetchDashboardStat = async () => {
     try {
-        const response = await fetch(`${BASE_URL}Hallgatok/statisztika/felevek`);
+        const response = await fetch(`${BASE_URL}Hallgatok/statisztika/dashboard`, {
+            cache: 'no-store'
+        });
         
         if (!response.ok) {
-            throw new Error(`Szerver hiba történt: ${response.status}`);
+            throw new Error(`Szerver hiba a statisztika lekérésekor: ${response.status}`);
         }
 
         return await response.json();
-        return data;
     } catch (error) {
-        console.error("hiba az adatok lekérdezésekor: ", error);
+        console.error("Hiba a statisztika lekérdezésekor: ", error);
         throw error;
-    }    
-}
-
-export const fetchTeljesitesStat = async () => {
-    try {
-        const response = await fetch(`${BASE_URL}Hallgatok/statisztika/teljesites`);
-        
-        if (!response.ok) {
-            throw new Error(`Szerver hiba történt: ${response.status}`);
-        }
-
-        return await response.json();
-        return data;
-    } catch (error) {
-        console.error("hiba az adatok lekérdezésekor: ", error);
-        throw error;
-    }    
-}
-
-export const fetchTeljModStat = async () => {
-    try {
-        const response = await fetch(`${BASE_URL}Hallgatok/statisztika/teljmod`);
-        
-        if (!response.ok) {
-            throw new Error(`Szerver hiba történt: ${response.status}`);
-        }
-
-        return await response.json();
-        return data;
-    } catch (error) {
-        console.error("hiba az adatok lekérdezésekor: ", error);
-        throw error;
-    }    
+    }
 }
 
 //uj hallgato

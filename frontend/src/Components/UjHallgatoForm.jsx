@@ -83,7 +83,6 @@ function UjHallgatoForm({onVissza, onSikeresMentes, szerkesztendoAdat}) {
             <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
                 <div className="space-y-4">
-                    <h3 className="font-semibold text-blue-800">Alapadatok</h3>
                     <div>
                         <label className="label font-bold">Neptun kód</label>
                         <input type="text" name="neptunId" value={formData.neptunId} onChange={handleChange} required maxLength="6" 
@@ -117,7 +116,6 @@ function UjHallgatoForm({onVissza, onSikeresMentes, szerkesztendoAdat}) {
                 </div>
 
                 <div className="space-y-4">
-                    <h3 className="font-semibold text-blue-800">Képzés adatok</h3>
                     <div>
                         <label className="label font-bold">Szak</label>
                         <select name="szakId" value={formData.szakId} onChange={handleChange} className="select select-bordered w-full">

@@ -132,31 +132,7 @@
         }
       }
     },
-    "/api/Hallgatok/statisztika/felevek": {
-      "get": {
-        "tags": [
-          "Hallgatok"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Hallgatok/statisztika/teljesites": {
-      "get": {
-        "tags": [
-          "Hallgatok"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Hallgatok/statisztika/teljmod": {
+    "/api/Hallgatok/statisztika/dashboard": {
       "get": {
         "tags": [
           "Hallgatok"

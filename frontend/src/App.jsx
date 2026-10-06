@@ -6,6 +6,7 @@ import HallgatoModal from "./Components/HallgatoModal.jsx";
 import { MockData } from "./data/MockData.js";
 import { fetchHallgatok } from "./services/hallgatoServices.js";
 import UjHallgatoForm from "./Components/UjHallgatoForm.jsx";
+import StatisztikaNezet from "./components/StatisztikaNezet.jsx";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -40,7 +41,9 @@ function App() {
 
     const adatBetoltes = async () => {
         try {
-            setLoading(true);
+            if (hallgatok.length === 0) {
+                setLoading(true);
+            }
             const data = await fetchHallgatok();
             setHallgatok(data);
         } catch (err) {
@@ -94,58 +97,66 @@ function App() {
             </>
         );
     } else {
-        if (loading) return <p>Adatok betöltése folyamatban</p>
+        if (loading) return <p>Adatok betöltése folyamatban...</p>
         if (error) return <p style={{color: 'red'}}>{error}</p>
+        
         return (
             <div className="min-h-screen flex flex-col bg-gray-50">
-                <NavBar onLogout={handleLogout} />
+                <NavBar 
+                    onLogout={handleLogout} 
+                    aktivNezet={aktivNezet}
+                    onNavigate={(ujNezet) => {
+                        setAktivNezet(ujNezet);
+                        setSzerkesztendoHallgato(null); 
+                    }}
+                />
+                
                 <main className="flex-grow max-w-7xl mx-auto p-6 w-full">
-                    {aktivNezet === 'lista' ? (
-                    <>
-                        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-                            <h2 className="text-2xl font-bold text-gray-800">Hallgatók listája</h2>
-                            <button 
-                                onClick={() => {setAktivNezet('uj_hallgato'); setSzerkesztendoHallgato(null)}}
-                                className="btn bg-blue-600 text-white hover:bg-blue-700 border-none shadow-sm"
-                            >
-                                + Új hallgató
-                            </button>
-                        </div>
-                        
+                    
+                    {/* 1. Lista nézet */}
+                    {aktivNezet === 'lista' && (
                         <HallgatoTable
                             adat={hallgatok}
                             onOpenDetails={(hallgato) => setSelectedHallgato(hallgato)}
                         />
-                    </>
-                ) : (
-                    <UjHallgatoForm 
-                        szerkesztendoAdat={szerkesztendoHallgato}
-                        onVissza={() => {
-                            setAktivNezet('lista');
-                            setSzerkesztendoHallgato(null);
-                        }}
-                        onSikeresMentes={() => {
-                            setAktivNezet('lista');
-                            setSzerkesztendoHallgato(null);
+                    )}
+
+                    {/* 2. Statisztika nézet */}
+                    {aktivNezet === 'statisztika' && (
+                        <StatisztikaNezet />
+                    )}
+
+                    {/* 3. Új hallgató*/}
+                    {aktivNezet === 'uj_hallgato' && (
+                        <UjHallgatoForm 
+                            szerkesztendoAdat={szerkesztendoHallgato}
+                            onVissza={() => {
+                                setAktivNezet('lista');
+                                setSzerkesztendoHallgato(null);
+                            }}
+                            onSikeresMentes={() => {
+                                setAktivNezet('lista');
+                                setSzerkesztendoHallgato(null);
+                                adatBetoltes();
+                            }}
+                        />
+                    )}
+
+                    <HallgatoModal
+                        hallgato={selectedHallgato}
+                        onClose={() => setSelectedHallgato(null)}
+                        onSikeresTorles={() => {
+                            setSelectedHallgato(null);
                             adatBetoltes();
                         }}
+                        onEdit={() => {
+                            setSzerkesztendoHallgato(selectedHallgato);
+                            setSelectedHallgato(null);
+                            setAktivNezet('uj_hallgato');
+                        }}
                     />
-                )}
-
-                <HallgatoModal
-                    hallgato={selectedHallgato}
-                    onClose={() => setSelectedHallgato(null)}
-                    onSikeresTorles={() => {
-                        setSelectedHallgato(null);
-                        adatBetoltes();
-                    }}
-                    onEdit={() => {
-                        setSzerkesztendoHallgato(selectedHallgato);
-                        setSelectedHallgato(null);
-                        setAktivNezet('uj_hallgato');
-                    }}
-                />
-            </main>
+                </main>
+                
                 {mutatGomb && (
                     <button
                         onClick={tetejere}
@@ -169,7 +180,7 @@ function App() {
                     </button>
                 )}
             </div>
-    );
+        );
     }
 }
 

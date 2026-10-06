@@ -84,28 +84,8 @@
   },
   {
     "ContainingType": "SzakdogaApi.Controllers.HallgatokController",
-    "Method": "GetFelevStatisztika",
-    "RelativePath": "api/Hallgatok/statisztika/felevek",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "SzakdogaApi.Controllers.HallgatokController",
-    "Method": "GetKepzesTeljesitesStatisztika",
-    "RelativePath": "api/Hallgatok/statisztika/teljesites",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "SzakdogaApi.Controllers.HallgatokController",
-    "Method": "GetTeljesitesModStatisztika",
-    "RelativePath": "api/Hallgatok/statisztika/teljmod",
+    "Method": "GetDashboardStats",
+    "RelativePath": "api/Hallgatok/statisztika/dashboard",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
