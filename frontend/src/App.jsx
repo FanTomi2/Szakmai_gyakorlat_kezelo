@@ -3,12 +3,11 @@ import NavBar from "./components/NavBar";
 import HallgatoTable from "./components/HallgatoTable";
 import LoginPage from "./Pages/LoginPage.jsx";
 import HallgatoModal from "./Components/HallgatoModal.jsx";
-import { MockData } from "./data/MockData.js";
 import { fetchHallgatok } from "./services/hallgatoServices.js";
 import UjHallgatoForm from "./Components/UjHallgatoForm.jsx";
 import StatisztikaNezet from "./components/StatisztikaNezet.jsx";
 import SearchBar from "./Components/SearchBar.jsx";
-
+import { letoltesCSV } from "./utils/exportUtils.js";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -65,6 +64,23 @@ function App() {
         const neptunTalalat = h.neptunId.toLowerCase().includes(keresoszoveg.toLowerCase());
         return nevTalalat || neptunTalalat;
     });
+
+    const handleExportCSV = () => {
+        const exportAdat = hallgatok.map(h => ({
+            'Név': h.nev,
+            'Neptun kód': h.neptunId,
+            'Email': h.email,
+            'Cég': h.cegNev || '-',
+            'Kapcsolattartó': h.kapcsolattarto || '-',
+            'Kar': h.kepzesek?.[0]?.karNev || '-',
+            'Szak': h.kepzesek?.[0]?.szakNev || '-',
+            'Félév': h.kepzesek?.[0]?.felevSzama || '-',
+            'Képzési szint': h.kepzesek?.[0]?.kepzesiSzint || '-',
+            'teljesítés': h.kepzesek?.[0]?.teljesites || '-',
+            'Gyakorlat módja': h.kepzesek?.[0]?.szakmaiGyakTelj || '-'
+        }));
+        letoltesCSV(exportAdat, 'hallgatok_lista');
+    };
 
     const handleLogout = () => {
         setIsLoggedIn(false);
@@ -125,9 +141,18 @@ function App() {
                     {/* 1. Lista nézet */}
                     {aktivNezet === 'lista' && (
                         <>
-                        
                             <div className="flex justify-between items-center w-full">
-                                <h2 className="text-xl font-bold text-gray-700 whitespace-nowrap flex-shrink-0">Összes hallgató</h2>
+                                <button
+                                    type="button"
+                                    onClick={handleExportCSV}
+                                    className="btn bg-green-600 text-white hover:bg-green-700 border-none shadow-sm flex-shrink-0"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                    Export
+                                </button>
+                                
                                 <SearchBar 
                                     keresoszoveg={keresoszoveg} 
                                     onKereses={setKeresoszoveg} 

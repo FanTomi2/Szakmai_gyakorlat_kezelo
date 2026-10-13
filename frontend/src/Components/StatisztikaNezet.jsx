@@ -4,6 +4,7 @@ import {
   Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title
 } from 'chart.js';
 import { Pie, Bar, Doughnut } from 'react-chartjs-2';
+import { letoltesCSV } from "../utils/exportUtils.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 
@@ -40,6 +41,24 @@ function StatisztikaNezet() {
         return <div className="alert alert-error text-white font-bold">{error}</div>;
     }
 
+    const handleStatExport = () => {
+        const exportAdat = [
+            { Kategória: 'Összes hallgató', Érték: stats.osszesHallgato },
+            { Kategória: 'Aktív cégek', Érték: stats.aktivCegek },
+            { Kategória: 'Legnépszerűbb szak', Érték: stats.legnepszerubbSzak },
+            { Kategória: '', Érték: '' },
+            { Kategória: 'Szakok elosztása', Érték: '' },
+            ...Object.entries(stats.szakokEloszlasa).map(([nev, db]) => ({ Kategória: nev, Érték: db + ' fő' })),
+            { Kategória: '', Érték: '' },
+            { Kategória: 'teljesítés', Érték: '' },
+            ...Object.entries(stats.munkarendEloszlasa).map(([nev, db]) => ({ Kategória: nev, Érték: db + ' fő' })),
+            { Kategória: '', Érték: '' },
+            { Kategória: 'Gyakorlat módja', Érték: '' },
+            ...Object.entries(stats.gyakorlatModEloszlasa).map(([nev, db]) => ({ Kategória: nev, Érték: db + ' fő' })),
+        ];
+        letoltesCSV(exportAdat, 'statisztika_export');
+    };
+
     // Chart.js formázó segédfüggvény
     const formatChartData = (dataObj, label, colors) => ({
         labels: Object.keys(dataObj),
@@ -56,7 +75,17 @@ function StatisztikaNezet() {
 
     return (
         <div className="space-y-6">
-            
+            <button
+                type="button" 
+                onClick={handleStatExport}
+                className="btn bg-green-600 text-white hover:bg-green-700 border-none shadow-sm flex-shrink-0"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Export
+            </button>
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="stat bg-white rounded shadow-sm border border-slate-100">
                     <div className="stat-figure text-blue-500">

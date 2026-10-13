@@ -16,9 +16,8 @@ function SearchBar({ keresoszoveg, onKereses }) {
     };
 
     return (
-        <div className="flex items-center justify-end w-full mb-6 h-12">
+        <div className="flex items-center justify-end w-full mb-2 h-12">
             <div 
-                // A 'w-full' fixen itt van, és a 'max-w' (maximális szélesség) animálódik a szétugrás elkerülése végett
                 className={`flex items-center bg-white rounded-xl transition-all duration-200 ease-in-out overflow-hidden w-full ${
                     nyitva 
                         ? 'max-w-md shadow-md border border-blue-300' 
@@ -26,7 +25,6 @@ function SearchBar({ keresoszoveg, onKereses }) {
                 }`}
             >
             
-            {/* flex-shrink-0 hozzáadva, hogy a gomb ne torzuljon / laposodjon el összecsukáskor */}
             <button 
                 type="button"
                 onClick={() => setNyitva(true)}
@@ -42,7 +40,6 @@ function SearchBar({ keresoszoveg, onKereses }) {
             <input
                 ref={inputRef}
                 type="text"
-                // A w-full itt fix, a tartó div max-width-je fogja összenyomni láthatatlanra
                 className={`outline-none bg-transparent transition-all duration-300 text-gray-700 h-full w-full ${
                     nyitva ? 'px-2 opacity-100' : 'px-0 opacity-0'
                 }`}
