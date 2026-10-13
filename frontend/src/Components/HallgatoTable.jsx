@@ -11,7 +11,7 @@ function HallgatoTable({ adat, onOpenDetails }) {
                         <th className="font-semibold px-4 py-4">Félév</th>
                         <th className="font-semibold px-4 py-4">Cég</th>
                         <th className="font-semibold px-4 py-4">Szakmai gyakorlat Teljesítési módja</th>
-                        <th className="font-semibold px-4 py-4 text-right">Részletek</th>
+                        <th className="font-semibold px-4 py-4">Részletek</th>
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-400">
@@ -25,7 +25,7 @@ function HallgatoTable({ adat, onOpenDetails }) {
                             <td className="px-4 py-3 text-slate-700">{hallgato.kepzesek[0]?.felevSzama}</td>
                             <td className="px-4 py-3 text-slate-700">{hallgato.cegNev}</td>
                             <td className="px-4 py-3 text-slate-700">{hallgato.kepzesek[0]?.szakmaiGyakTelj}</td>
-                            <td className="px-4 py-3 text-right">
+                            <td className="px-4 py-3">
                                 <button
                                     className="btn btn-sm bg-white text-blue-600 border-blue-300 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all shadow-sm"
                                     onClick={() => onOpenDetails(hallgato)}

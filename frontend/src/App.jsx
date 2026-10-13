@@ -7,6 +7,8 @@ import { MockData } from "./data/MockData.js";
 import { fetchHallgatok } from "./services/hallgatoServices.js";
 import UjHallgatoForm from "./Components/UjHallgatoForm.jsx";
 import StatisztikaNezet from "./components/StatisztikaNezet.jsx";
+import SearchBar from "./Components/SearchBar.jsx";
+
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -18,6 +20,7 @@ function App() {
     const [mutatGomb, setMutatGomb] = useState(false);
     const [aktivNezet, setAktivNezet] = useState('lista');
     const [szerkesztendoHallgato, setSzerkesztendoHallgato] = useState(null);
+    const [keresoszoveg, setKeresoszoveg] = useState('');
 
     useEffect(() => {
         const gorgetesFigyelo = () => {
@@ -37,7 +40,7 @@ function App() {
             top: 0,
             behavior: 'smooth'
         });
-    }    
+    };
 
     const adatBetoltes = async () => {
         try {
@@ -56,6 +59,12 @@ function App() {
     useEffect(() => {
         adatBetoltes();
     }, []);
+
+    const szurtHallgatok = hallgatok.filter((h) => {
+        const nevTalalat = h.nev.toLowerCase().includes(keresoszoveg.toLowerCase());
+        const neptunTalalat = h.neptunId.toLowerCase().includes(keresoszoveg.toLowerCase());
+        return nevTalalat || neptunTalalat;
+    });
 
     const handleLogout = () => {
         setIsLoggedIn(false);
@@ -115,10 +124,27 @@ function App() {
                     
                     {/* 1. Lista nézet */}
                     {aktivNezet === 'lista' && (
-                        <HallgatoTable
-                            adat={hallgatok}
-                            onOpenDetails={(hallgato) => setSelectedHallgato(hallgato)}
-                        />
+                        <>
+                        
+                            <div className="flex justify-between items-center w-full">
+                                <h2 className="text-xl font-bold text-gray-700 whitespace-nowrap flex-shrink-0">Összes hallgató</h2>
+                                <SearchBar 
+                                    keresoszoveg={keresoszoveg} 
+                                    onKereses={setKeresoszoveg} 
+                                />
+                            </div>
+
+                            <HallgatoTable
+                                adat={szurtHallgatok}
+                                onOpenDetails={(hallgato) => setSelectedHallgato(hallgato)}
+                            />
+
+                            {szurtHallgatok.length === 0 && hallgatok.length > 0 && (
+                                <div className="text-center py-10 text-gray-500 text-lg">
+                                    Nincs találat a következőre: <span className="font-bold">"{keresoszoveg}"</span>
+                                </div>
+                            )}
+                        </>
                     )}
 
                     {/* 2. Statisztika nézet */}
