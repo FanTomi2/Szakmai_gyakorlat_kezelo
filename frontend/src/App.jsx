@@ -5,7 +5,7 @@ import LoginPage from "./Pages/LoginPage.jsx";
 import HallgatoModal from "./Components/HallgatoModal.jsx";
 import { fetchHallgatok } from "./services/hallgatoServices.js";
 import UjHallgatoForm from "./Components/UjHallgatoForm.jsx";
-import StatisztikaNezet from "./components/StatisztikaNezet.jsx";
+import StatisztikaNezet from "./Components/StatisztikaNezet.jsx";
 import SearchBar from "./Components/SearchBar.jsx";
 import { letoltesCSV } from "./utils/exportUtils.js";
 
