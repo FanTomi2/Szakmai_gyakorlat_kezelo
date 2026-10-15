@@ -5,12 +5,12 @@ services:
     image: postgres:15-alpine
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Jelszo123!
-      POSTGRES_DB: szakdogadb
+      POSTGRES_PASSWORD: AdminAdmin
+      POSTGRES_DB: SzakmaiGyakorlatAdatbazis
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d szakdogadb"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d SzakmaiGyakorlatAdatbazis"]
       interval: 3s
       timeout: 3s
       retries: 5

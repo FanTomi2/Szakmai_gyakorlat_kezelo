@@ -9,12 +9,10 @@ RUN dotnet restore "backend.csproj"
 COPY . .
 RUN dotnet publish "backend.csproj" -c Release -o /app/publish
 
-# 2. fázis: Futtatás (Runtime)
+#Futtatás (Runtime)
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
 COPY --from=build /app/publish .
 
-# .NET 8 esetén az alapértelmezett port a 8080
 EXPOSE 8080
 ENTRYPOINT ["dotnet", "backend.dll"] 
-# (Ide is a te lefordított DLL-ed nevét írd!)
