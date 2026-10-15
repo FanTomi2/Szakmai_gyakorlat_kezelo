@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  # 1. A PostgreSQL adatbázis szerver
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: AdminAdmin
+      POSTGRES_DB: SzakmaiGyakorlatAdatbazis
+    ports:
+      - "5432:5432"
+
+  # 2. A C# Backend
+  backend:
+    build: 
+      context: ./backend
+    ports:
+      - "7064:8080"
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=db;Database=szakdogadb;Username=postgres;Password=Jelszo123!
+
+  # 3. A React Frontend
+  frontend:
+    build: 
+      context: ./frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
