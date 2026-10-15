@@ -120,7 +120,7 @@ namespace backend
                     NeptunId = neptun,
                     KarId = kar.Id,
                     SzakId = szakok[rand.Next(szakok.Count)].Id,
-                    FelevSzama = rand.NextDouble() < 0.8 ? 7 : rand.Next(0,9),
+                    FelevSzama = rand.NextDouble() < 0.8 ? 7 : rand.Next(5,10),
                     KepzesiSzint = "BSc",
                     Teljesites = teljesitesModok[rand.Next(teljesitesModok.Length)],
                     SzakmaiGyakTelj = gyakModok[rand.Next(gyakModok.Length)]
