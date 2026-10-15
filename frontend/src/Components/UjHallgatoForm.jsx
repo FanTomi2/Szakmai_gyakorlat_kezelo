@@ -73,7 +73,7 @@ function UjHallgatoForm({onVissza, onSikeresMentes, szerkesztendoAdat}) {
     };
 
     return (
-        <div className="bg-white p-8 rounded-xl shadow-lg border border-blue-200">
+        <div className="bg-white p-8 rounded-xl shadow-lg border border-blue-200 pb-4">
             <h2 className="text-2xl font-bold text-slate-800 mb-6 border-b pb-2">
                 {szerkesztendoAdat ? 'Hallgató adatainak módosítása' : 'Új hallgató felvétele'}
             </h2>

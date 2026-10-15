@@ -62,7 +62,8 @@ function App() {
     const szurtHallgatok = hallgatok.filter((h) => {
         const nevTalalat = h.nev.toLowerCase().includes(keresoszoveg.toLowerCase());
         const neptunTalalat = h.neptunId.toLowerCase().includes(keresoszoveg.toLowerCase());
-        return nevTalalat || neptunTalalat;
+        const cegTalalt = h.cegNev.toLowerCase().includes(keresoszoveg.toLowerCase());
+        return nevTalalat || neptunTalalat || cegTalalt;
     });
 
     const handleExportCSV = () => {

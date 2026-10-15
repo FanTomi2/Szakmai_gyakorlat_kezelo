@@ -14,7 +14,7 @@ function NavBar({ onLogout, aktivNezet, onNavigate }) {
                         <li><a onClick={() => onNavigate('uj_hallgato')} className={aktivNezet === 'uj_hallgato' ? 'bg-blue-100 font-bold text-blue-700' : ''}>Új hallgató</a></li>
                     </ul>
                 </div>
-                <a className="normal-case text-xl text-blue-500 font-black">Szakdolgozat kezelő</a>
+                <a className="normal-case text-xl text-blue-500 font-black">Szakmai gyakorlat kezelő</a>
             </div>
             
             <div className="navbar-center hidden lg:flex">
