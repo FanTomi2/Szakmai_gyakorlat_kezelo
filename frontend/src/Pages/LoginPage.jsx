@@ -6,7 +6,7 @@ function LoginPage({ onLogin }) {
     const [hiba, setHiba] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const BASE_URL = "https://localhost:7064/api";
+    const BASE_URL = "http://localhost:7064/api";
 
     const handleSubmit = async (e) => {
         e.preventDefault();
