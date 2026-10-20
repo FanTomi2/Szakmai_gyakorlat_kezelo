@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import NavBar from "./Components/NavBar.jsx";
-import HallgatoTable from "./Components/HallgatoTable.jsx";
+import HallgatoTable from "./Components/Hallgatotable.jsx";
 import LoginPage from "./Pages/LoginPage.jsx";
 import HallgatoModal from "./Components/HallgatoModal.jsx";
 import { fetchHallgatok } from "./services/hallgatoServices.js";

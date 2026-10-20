@@ -1,30 +1,51 @@
-const BASE_URL = "http://localhost:7064/api/";
+const BASE_URL = "https://localhost:7064/api/";
+
+const getAuthHeaders = () => {
+    const token = localStorage.getItem('token');
+    return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    };
+};
+
+const checkAuth = (response) => {
+    if (response.status === 401) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('felhasznalo');
+        window.location.reload(); 
+    }
+};
 
 export const fetchHallgatok = async () => {
     try {
         const response = await fetch(`${BASE_URL}Hallgatok/reszletes`, {
+            headers: getAuthHeaders(),
             cache: 'no-store' 
         });
         
+        checkAuth(response);
+
         if (!response.ok) {
             throw new Error(`Szerver hiba történt: ${response.status}`);
         }
 
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (error) {
-        console.error("hiba az adatok lekérdezésekor: ", error);
+        console.error("Hiba az adatok lekérdezésekor: ", error);
         throw error;
     }
 }
 
-//Statisztika
+// Statisztika
 export const fetchDashboardStat = async () => {
     try {
         const response = await fetch(`${BASE_URL}Hallgatok/statisztika/dashboard`, {
+            headers: getAuthHeaders(),
             cache: 'no-store'
         });
         
+        checkAuth(response);
+
         if (!response.ok) {
             throw new Error(`Szerver hiba a statisztika lekérésekor: ${response.status}`);
         }
@@ -36,16 +57,16 @@ export const fetchDashboardStat = async () => {
     }
 }
 
-//uj hallgato
+// Uj hallgato
 export const createHallgato = async (hallgatoData) => {
     try {
         const response = await fetch(`${BASE_URL}Hallgatok`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: getAuthHeaders(),
             body: JSON.stringify(hallgatoData)
         });
+
+        checkAuth(response);
 
         if (!response.ok) {
             const errorText = await response.text();
@@ -58,12 +79,15 @@ export const createHallgato = async (hallgatoData) => {
     }
 }
 
-//hallgato törlés
+// Hallgato törlés
 export const deleteHallgato = async (neptunId) => {
     try {
         const response = await fetch(`${BASE_URL}Hallgatok/${neptunId}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: getAuthHeaders()
         });
+
+        checkAuth(response);
 
         if (!response.ok) {
             throw new Error(`Szerver hiba történt a törléskor: ${response.status}`);
@@ -77,16 +101,16 @@ export const deleteHallgato = async (neptunId) => {
     }
 };
 
-//hallgato modositas
+// Hallgato modositas
 export const updateHallgato = async (neptunId, hallgatoData) => {
     try {
         const response = await fetch(`${BASE_URL}Hallgatok/${neptunId}`, {
             method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: getAuthHeaders(),
             body: JSON.stringify(hallgatoData)
         });
+
+        checkAuth(response);
 
         if (!response.ok) {
             throw new Error(`Hiba történt a módosításkor: ${response.status}`);

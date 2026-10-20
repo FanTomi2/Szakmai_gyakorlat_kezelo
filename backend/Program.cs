@@ -1,6 +1,9 @@
 
 using backend.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace backend
 {
@@ -30,6 +33,23 @@ namespace backend
                     });
             });
 
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+                };
+            });
+
+            builder.Services.AddAuthorization();
+
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())
@@ -58,8 +78,9 @@ namespace backend
 
             app.UseCors("AllowFrontend");
 
-            app.UseAuthorization();
+            app.UseAuthentication();
 
+            app.UseAuthorization();
 
             app.MapControllers();
 
@@ -84,6 +105,35 @@ namespace backend
                 new backend.Models.Szak { Nev = "Logisztikai mérnök" }
             };
             context.Szakok.AddRange(szakok);
+            context.SaveChanges();
+
+            var infoSzak = szakok.First(s => s.Nev == "Mérnökinformatikus");
+            var oktatok = new List<backend.Models.Oktato>
+            {
+                new backend.Models.Oktato { Nev = "Informatikus Lajos", SzakId = infoSzak.Id }
+            };
+            context.Oktatok.AddRange(oktatok);
+            context.SaveChanges();
+
+            var felhasznalok = new List<backend.Models.Felhasznalo>
+            {
+                // 1. ADMIN FELHASZNÁLÓ (Nincs OktatoId-ja)
+                new backend.Models.Felhasznalo
+                {
+                    Email = "admin@nje.hu",
+                    Jelszo = backend.Helper.PasswordHasher.HashPassword("Admin123!"),
+                    OktatoId = null
+                },
+        
+                // 2. MÉRNÖKINFORMATIKUS OKTATÓ
+                new backend.Models.Felhasznalo
+                {
+                    Email = "info@nje.hu",
+                    Jelszo = backend.Helper.PasswordHasher.HashPassword("Info123!"),
+                    OktatoId = oktatok[0].Id
+                }
+            };
+            context.Felhasznalok.AddRange(felhasznalok);
             context.SaveChanges();
 
             var cegNevek = new[] { "Audi Hungaria Zrt.", "Knorr-Bremse Kft.", "Bosch Group", "Telekom Nyrt.", "OTP Bank", "Richter Gedeon Nyrt.", "Morgan Stanley", "IBM", "Nokia", "EPAM" };
@@ -122,7 +172,8 @@ namespace backend
                     SzakId = szakok[rand.Next(szakok.Count)].Id,
                     FelevSzama = rand.NextDouble() < 0.8 ? 7 : rand.Next(5,10),
                     KepzesiSzint = "BSc",
-                    Teljesites = teljesitesModok[rand.Next(teljesitesModok.Length)],
+                    //Teljesites = teljesitesModok[rand.Next(teljesitesModok.Length)],
+                    Teljesites = rand.NextDouble() < 0.60 ? teljesitesModok[0] : teljesitesModok[rand.Next(teljesitesModok.Length)],
                     SzakmaiGyakTelj = gyakModok[rand.Next(gyakModok.Length)]
                 };
                 context.Kepzesek.Add(kepzes);

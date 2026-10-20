@@ -2,12 +2,13 @@
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using backend.Data;
-using backend.Models;
 using backend.DTO;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace SzakdogaApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class HallgatokController : ControllerBase
@@ -31,14 +32,24 @@ namespace SzakdogaApi.Controllers
         [HttpGet("reszletes")]
         public async Task<IActionResult> GetHallgatokReszletesen()
         {
-            var hallgatok = await _context.Hallgatok
-                // Táblák összekapcsolása
+            var szerepkor = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+            var query = _context.Hallgatok
                 .Include(h => h.Ceg)
-                .Include(h => h.Kepzesek)
-                    .ThenInclude(k => k.Kar)
-                .Include(h => h.Kepzesek)
-                    .ThenInclude(k => k.Szak)
-                // JSON struktúra
+                .Include(h => h.Kepzesek).ThenInclude(k => k.Kar)
+                .Include(h => h.Kepzesek).ThenInclude(k => k.Szak)
+                .AsQueryable();
+
+            var szakIdClaim = User.Claims.FirstOrDefault(c => c.Type == "SzakId")?.Value;
+            if (szerepkor == "Oktato" && !string.IsNullOrEmpty(szakIdClaim))
+            {
+                if (int.TryParse(szakIdClaim, out int szakId))
+                {
+                    query = query.Where(h => h.Kepzesek.Any(k => k.SzakId == szakId));
+                }
+            }
+
+            var hallgatok = await query
                 .Select(h => new
                 {
                     NeptunId = h.NeptunId,
