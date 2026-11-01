@@ -82,6 +82,11 @@ namespace SzakdogaApi.Controllers
                     .ThenInclude(k => k.Szak)
                 .ToListAsync();
 
+            //Értékelések lekérése
+            var ertekelesek = await _context.Ertekelesek
+                .Include(e => e.Ceg)
+                .ToListAsync();
+
             // Szakok eloszlásának kiszámolása
             var szakok = hallgatok
                 .Where(h => h.Kepzesek.Any() && h.Kepzesek.First().Szak != null)
@@ -112,6 +117,29 @@ namespace SzakdogaApi.Controllers
                 })
                 .ToDictionary(g => g.Key, g => g.Count());
 
+            //Cégek értékeléseinek kiszámítása
+            var cegErtekelesek = ertekelesek
+                .Where(e => e.Ceg != null)
+                .GroupBy(e => e.Ceg!.Nev)
+                .Select(g => new
+                {
+                    CegNev = g.Key,
+                    ErtekelesekSzama = g.Count(),
+
+                    // Kérdésenkénti átlagok (2 tizedesjegyre kerekítve)
+                    AtlagKerdes1 = Math.Round(g.Average(e => e.kerdes1), 2),
+                    AtlagKerdes2 = Math.Round(g.Average(e => e.kerdes2), 2),
+                    AtlagKerdes3 = Math.Round(g.Average(e => e.kerdes3), 2),
+                    AtlagKerdes4 = Math.Round(g.Average(e => e.kerdes4), 2),
+
+                    // Összesített átlag a cégre vonatkozóan
+                    OsszesitettAtlag = Math.Round(g.Average(e =>
+                        (e.kerdes1 + e.kerdes2 + e.kerdes3 + e.kerdes4) / 4.0), 2)
+                })
+                // A legjobb cégek kerülnek előre
+                .OrderByDescending(c => c.OsszesitettAtlag)
+                .ToList();
+
             var stat = new
             {
                 OsszesHallgato = hallgatok.Count,
@@ -120,7 +148,8 @@ namespace SzakdogaApi.Controllers
                 SzakokEloszlasa = szakok,
                 FelevekEloszlasa = felevek.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value),
                 MunkarendEloszlasa = munkarend,
-                GyakorlatModEloszlasa = gyakMod
+                GyakorlatModEloszlasa = gyakMod,
+                CegErtekelesek = cegErtekelesek
             };
 
             return Ok(stat);
