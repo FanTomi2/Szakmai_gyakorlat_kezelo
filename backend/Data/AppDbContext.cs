@@ -16,6 +16,7 @@ namespace backend.Data
         public DbSet<Kepzes> Kepzesek { get; set; }
         public DbSet<Oktato> Oktatok { get; set; }
         public DbSet<Felhasznalo> Felhasznalok { get; set; }
+        public DbSet<Ertekeles> Ertekelesek { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

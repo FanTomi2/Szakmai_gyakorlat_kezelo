@@ -34,6 +34,7 @@ namespace backend.Models
         [Required]
         public string Nev { get; set; } = string.Empty;
         public ICollection<Hallgato> Hallgatok { get; set; } = new List<Hallgato>();
+        public ICollection<Ertekeles> Ertekelesek { get; set; }= new List<Ertekeles>();
     }
 
     public class Hallgato
@@ -52,6 +53,7 @@ namespace backend.Models
         public Ceg? Ceg { get; set; }
 
         public ICollection<Kepzes> Kepzesek { get; set; } = new List<Kepzes>();
+        public ICollection<Ertekeles> Ertekelesek { get; set; } = new List<Ertekeles>();
     }
 
     public class Kepzes
