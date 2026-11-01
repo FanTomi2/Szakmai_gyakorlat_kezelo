@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using backend.DTO;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using backend.Services;
 
 namespace SzakdogaApi.Controllers
 {
@@ -14,10 +15,12 @@ namespace SzakdogaApi.Controllers
     public class HallgatokController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IEmailService _emailService;
 
-        public HallgatokController(AppDbContext context)
+        public HallgatokController(AppDbContext context, IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         // csak hallgatok
@@ -202,6 +205,25 @@ namespace SzakdogaApi.Controllers
             _context.Hallgatok.Add(ujHallgato);
             _context.Kepzesek.Add(ujKepzes);
             await _context.SaveChangesAsync();
+
+            string targy = "Szakmai Gyakorlat Értékelés (Teszt)";
+            string uzenet = $@"
+                Kedves {dto.nev}!
+                A szakmai gyakorlatod rögzítésre került a rendszerben.
+                Kérjük, értékeld a helyet az alábbi linken!
+                Belépéshez a Neptun kódod: {dto.NeptunId.ToUpper()}
+                Link: http://localhost:5173/ertekeles
+            ";
+
+            try
+            {
+                // Meghívjuk a szimulált szolgáltatást
+                await _emailService.SendEmailAsync(dto.email, targy, uzenet);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Hiba az e-mail folyamatban: {ex.Message}");
+            }
 
             return Ok(new { message = "Hallgató sikeresen rögzítve!" });
         }
