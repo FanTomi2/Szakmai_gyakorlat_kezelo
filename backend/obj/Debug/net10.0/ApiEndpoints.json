@@ -16,6 +16,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "backend.Controllers.ErtekelesController",
+    "Method": "PostErtekeles",
+    "RelativePath": "api/Ertekeles",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "backend.DTO.UjErtekelesDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SzakdogaApi.Controllers.HallgatokController",
     "Method": "GetHallgatok",
     "RelativePath": "api/Hallgatok",

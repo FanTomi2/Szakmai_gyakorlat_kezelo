@@ -8,6 +8,7 @@ import UjHallgatoForm from "./Components/UjHallgatoForm.jsx";
 import StatisztikaNezet from "./Components/StatisztikaNezet.jsx";
 import SearchBar from "./Components/SearchBar.jsx";
 import { letoltesCSV } from "./utils/exportUtils.js";
+import ErtekelesPage from "./Pages/ErtekelesPage.jsx";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -56,8 +57,10 @@ function App() {
     };
 
     useEffect(() => {
-        adatBetoltes();
-    }, []);
+        if (isLoggedIn) {
+            adatBetoltes();
+        }
+    }, [isLoggedIn]);
 
     const szurtHallgatok = hallgatok.filter((h) => {
         const nevTalalat = h.nev.toLowerCase().includes(keresoszoveg.toLowerCase());
@@ -90,6 +93,11 @@ function App() {
             setShowToast(false);
         }, 3000);
     };
+
+    const isErtekelesUrl = window.location.pathname === '/ertekeles';
+    if (isErtekelesUrl) {
+        return <ErtekelesPage />
+    }
 
     if (!isLoggedIn) {
         return (

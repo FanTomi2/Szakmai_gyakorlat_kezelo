@@ -199,6 +199,38 @@
         }
       }
     },
+    "/api/Ertekeles": {
+      "post": {
+        "tags": [
+          "Ertekeles"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UjErtekelesDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UjErtekelesDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UjErtekelesDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/WeatherForecast": {
       "get": {
         "tags": [
@@ -263,6 +295,75 @@
             "items": {
               "$ref": "#/components/schemas/Hallgato"
             }
+          },
+          "ertekelesek": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Ertekeles"
+            }
+          }
+        }
+      },
+      "Ertekeles": {
+        "required": [
+          "neptunId"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "neptunId": {
+            "type": "string"
+          },
+          "cegId": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "kerdes1": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "kerdes2": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "kerdes3": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "kerdes4": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "kitoltesIdeje": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -342,6 +443,12 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Kepzes"
+            }
+          },
+          "ertekelesek": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Ertekeles"
             }
           }
         }
@@ -532,6 +639,46 @@
           }
         }
       },
+      "UjErtekelesDto": {
+        "type": "object",
+        "properties": {
+          "neptunId": {
+            "type": "string"
+          },
+          "kerdes1": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "kerdes2": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "kerdes3": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "kerdes4": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          }
+        }
+      },
       "UjHallgatoDto": {
         "type": "object",
         "properties": {
@@ -616,6 +763,9 @@
     },
     {
       "name": "Auth"
+    },
+    {
+      "name": "Ertekeles"
     },
     {
       "name": "WeatherForecast"
