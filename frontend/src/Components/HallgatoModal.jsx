@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { deleteHallgato } from "../services/hallgatoServices";
+import { deleteHallgato, isAdmin } from "../services/hallgatoServices";
 
 function HallgatoModal({ hallgato, onClose, onSikeresTorles, onEdit }) {
     const [torlesFolyamatban, setTorlesFolyamatban] = useState(false);
@@ -66,7 +66,7 @@ function HallgatoModal({ hallgato, onClose, onSikeresTorles, onEdit }) {
                             {hallgato.kapcsolattarto || "-"}
                         </p>
                         <p className="mb-2">
-                            <span className="font-semibold">Teljesítés: </span>
+                            <span className="font-semibold">Munkarend: </span>
                             {hallgato.kepzesek[0].teljesites || "-"}
                         </p>
                         <p className="mb-2">
@@ -81,23 +81,25 @@ function HallgatoModal({ hallgato, onClose, onSikeresTorles, onEdit }) {
                 </div>
 
                 <div className="modal-action flex justify-between">
-                    <div className="modal-action felx ">
-                        <button
-                            type="button"
-                            onClick={onEdit}
-                            className="btn bg-blue-600 text-white hover:bg-blue-700 border-none"
-                        >
-                            Szerkesztés
-                        </button>
-                        <button
-                            type="button"
-                            onClick={handleTorles}
-                            disabled={torlesFolyamatban}
-                            className="btn bg-red-600 text-white hover:bg-red-700 border-none"
-                        >
-                            {torlesFolyamatban ? 'Törlés folyamatban...' : 'Hallgató törlése'}
-                        </button>
-                    </div>
+                    {isAdmin() && (
+                        <div className="modal-action felx ">
+                            <button
+                                type="button"
+                                onClick={onEdit}
+                                className="btn bg-blue-600 text-white hover:bg-blue-700 border-none"
+                            >
+                                Szerkesztés
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleTorles}
+                                disabled={torlesFolyamatban}
+                                className="btn bg-red-600 text-white hover:bg-red-700 border-none"
+                            >
+                                {torlesFolyamatban ? 'Törlés folyamatban...' : 'Hallgató törlése'}
+                            </button>
+                        </div>
+                    )}
                     <div className="modal-action felx">
                         <button
                             type="button"

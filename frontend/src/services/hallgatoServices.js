@@ -14,6 +14,23 @@ const checkAuth = (response) => {
         localStorage.removeItem('felhasznalo');
         window.location.reload(); 
     }
+    if (response.status === 403) {
+        alert("Nincs jogosultságod ehhez a művelethez!");
+    }
+};
+
+export const isAdmin = () => {
+    const token = localStorage.getItem('token');
+    if (!token) return false;
+
+    try {
+
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const role = payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] || payload.role;
+        return role === 'Admin';
+    } catch {
+        return false;
+    }
 };
 
 export const fetchHallgatok = async () => {

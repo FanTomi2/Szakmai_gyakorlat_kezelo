@@ -114,7 +114,7 @@ function ErtekelesPage() {
 
                             <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-6">
                                 <CsillagosErtekelo 
-                                    label="1. Milyen volt a munkahelyi légkör?" 
+                                    label="1. Mennyire sikerült belelátni a cég tevékenységeibe?" 
                                     ertek={kerdes1} 
                                     setErtek={setKerdes1} 
                                 />
@@ -124,12 +124,12 @@ function ErtekelesPage() {
                                     setErtek={setKerdes2} 
                                 />
                                 <CsillagosErtekelo 
-                                    label="3. Milyen volt a mentorálás gyakorisága és minősége?" 
+                                    label="3. Mennyire volt elegendő mentorálás gyakorisága és minősége?" 
                                     ertek={kerdes3} 
                                     setErtek={setKerdes3} 
                                 />
                                 <CsillagosErtekelo 
-                                    label="4. Szívesen választanád újra ezt a céget?" 
+                                    label="4. Ajánlaná-e ezt a céget másnak?" 
                                     ertek={kerdes4} 
                                     setErtek={setKerdes4} 
                                 />

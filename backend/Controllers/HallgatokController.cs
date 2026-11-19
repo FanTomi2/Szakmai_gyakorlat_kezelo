@@ -160,6 +160,7 @@ namespace SzakdogaApi.Controllers
 
         //uj hallgato
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PostHallgato([FromBody] UjHallgatoDto dto)
         {
             if (await _context.Hallgatok.AnyAsync(h => h.NeptunId == dto.NeptunId.ToUpper()))
@@ -206,7 +207,7 @@ namespace SzakdogaApi.Controllers
             _context.Kepzesek.Add(ujKepzes);
             await _context.SaveChangesAsync();
 
-            string targy = "Szakmai Gyakorlat Értékelés (Teszt)";
+            string targy = "Szakmai Gyakorlat Értékelés";
             string uzenet = $@"
                 Kedves {dto.nev}!
                 A szakmai gyakorlatod rögzítésre került a rendszerben.
@@ -230,6 +231,7 @@ namespace SzakdogaApi.Controllers
 
         //hallgato törlés
         [HttpDelete("{neptunId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteHallgato(string neptunId)
         {
             var kod = neptunId.ToUpper();
@@ -251,6 +253,7 @@ namespace SzakdogaApi.Controllers
 
         //hallgato modositas
         [HttpPut("{neptunId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutHallgato(string neptunId, [FromBody] UjHallgatoDto dto)
         {
             var kod = neptunId.ToUpper();

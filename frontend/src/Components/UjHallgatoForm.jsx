@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { createHallgato, updateHallgato } from "../services/hallgatoServices";
 
 function UjHallgatoForm({onVissza, onSikeresMentes, szerkesztendoAdat}) {
+
     const [formData, setFormData] = useState({
         neptunId: '',
         nev: '',

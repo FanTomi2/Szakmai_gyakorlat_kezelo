@@ -1,3 +1,5 @@
+import { isAdmin } from '../services/hallgatoServices';
+
 function NavBar({ onLogout, aktivNezet, onNavigate }) {
     return (
         <div className="navbar bg-white shadow-md px-4 mb-4 sticky top-0 z-40">
@@ -11,7 +13,9 @@ function NavBar({ onLogout, aktivNezet, onNavigate }) {
                     <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 gap-2">
                         <li><a onClick={() => onNavigate('lista')} className={aktivNezet === 'lista' ? 'bg-blue-100 font-bold text-blue-700' : ''}>Hallgatók listája</a></li>
                         <li><a onClick={() => onNavigate('statisztika')} className={aktivNezet === 'statisztika' ? 'bg-blue-100 font-bold text-blue-700' : ''}>Statisztikák</a></li>
-                        <li><a onClick={() => onNavigate('uj_hallgato')} className={aktivNezet === 'uj_hallgato' ? 'bg-blue-100 font-bold text-blue-700' : ''}>Új hallgató</a></li>
+                        {isAdmin() && (
+                            <li><a onClick={() => onNavigate('uj_hallgato')} className={aktivNezet === 'uj_hallgato' ? 'bg-blue-100 font-bold text-blue-700' : ''}>Új hallgató</a></li>
+                        )}
                     </ul>
                 </div>
                 <a className="normal-case text-xl text-blue-500 font-black">Szakmai gyakorlat kezelő</a>
@@ -29,11 +33,13 @@ function NavBar({ onLogout, aktivNezet, onNavigate }) {
                             Statisztikák
                         </a>
                     </li>
-                    <li>
-                        <a onClick={() => onNavigate('uj_hallgato')} className={`rounded ${aktivNezet === 'uj_hallgato' ? 'bg-blue-100 font-bold text-blue-700' : 'hover:bg-blue-50'}`}>
-                            Új hallgató
-                        </a>
-                    </li>
+                    {isAdmin() && (
+                        <li>
+                            <a onClick={() => onNavigate('uj_hallgato')} className={`rounded ${aktivNezet === 'uj_hallgato' ? 'bg-blue-100 font-bold text-blue-700' : 'hover:bg-blue-50'}`}>
+                                Új hallgató
+                            </a>
+                        </li>
+                    )}
                 </ul>
             </div>
             

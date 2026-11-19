@@ -123,8 +123,8 @@ namespace backend
                 // 1. ADMIN FELHASZNÁLÓ (Nincs OktatoId-ja)
                 new backend.Models.Felhasznalo
                 {
-                    Email = "admin@nje.hu",
-                    Jelszo = backend.Helper.PasswordHasher.HashPassword("Admin123!"),
+                    Email = "vezeto@nje.hu",
+                    Jelszo = backend.Helper.PasswordHasher.HashPassword("Vezeto123!"),
                     OktatoId = null
                 },
         
