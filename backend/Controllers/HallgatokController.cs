@@ -168,6 +168,12 @@ namespace SzakdogaApi.Controllers
                 return BadRequest("Már létezik ilyen neptun kód");
             }
 
+            var kivalasztottSzak = await _context.Szakok.FindAsync(dto.SzakId);
+            if (kivalasztottSzak == null)
+            {
+                return BadRequest("A megadott szak nem található!");
+            }
+
             var letezikCeg = await _context.Cegek
                 .FirstOrDefaultAsync(c => c.Nev.ToLower() == dto.CegNev.ToLower());
 
@@ -175,7 +181,8 @@ namespace SzakdogaApi.Controllers
             if (letezikCeg != null)
             {
                 veglegesCegId = letezikCeg.Id;
-            } else
+            }
+            else
             {
                 var ujCeg = new Ceg { Nev = dto.CegNev };
                 _context.Cegek.Add(ujCeg);
@@ -195,7 +202,7 @@ namespace SzakdogaApi.Controllers
             var ujKepzes = new Kepzes
             {
                 NeptunId = dto.NeptunId.ToUpper(),
-                KarId = 1,
+                KarId = kivalasztottSzak.KarId,
                 SzakId = dto.SzakId,
                 Teljesites = dto.Teljesites,
                 FelevSzama = dto.FelevSzama,
@@ -284,6 +291,12 @@ namespace SzakdogaApi.Controllers
             var kepzes = hallgato.Kepzesek.FirstOrDefault();
             if (kepzes != null)
             {
+                var kivalasztottSzak = await _context.Szakok.FindAsync(dto.SzakId);
+                if (kivalasztottSzak != null)
+                {
+                    kepzes.KarId = kivalasztottSzak.KarId;
+                }
+
                 kepzes.SzakId = dto.SzakId;
                 kepzes.Teljesites = dto.Teljesites;
                 kepzes.FelevSzama = dto.FelevSzama;

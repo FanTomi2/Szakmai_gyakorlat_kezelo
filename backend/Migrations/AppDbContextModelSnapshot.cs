@@ -225,11 +225,16 @@ namespace backend.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("KarId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Nev")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("KarId");
 
                     b.ToTable("Szakok");
                 });
@@ -307,6 +312,17 @@ namespace backend.Migrations
                     b.Navigation("Szak");
                 });
 
+            modelBuilder.Entity("backend.Models.Szak", b =>
+                {
+                    b.HasOne("backend.Models.Kar", "Kar")
+                        .WithMany("Szakok")
+                        .HasForeignKey("KarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Kar");
+                });
+
             modelBuilder.Entity("backend.Models.Ceg", b =>
                 {
                     b.Navigation("Ertekelesek");
@@ -324,6 +340,8 @@ namespace backend.Migrations
             modelBuilder.Entity("backend.Models.Kar", b =>
                 {
                     b.Navigation("Kepzesek");
+
+                    b.Navigation("Szakok");
                 });
 
             modelBuilder.Entity("backend.Models.Oktato", b =>

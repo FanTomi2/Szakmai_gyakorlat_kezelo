@@ -12,6 +12,7 @@ namespace backend.Models
         public string Nev { get; set; } = string.Empty;
 
         public ICollection<Kepzes> Kepzesek { get; set; } = new List<Kepzes>();
+        public ICollection<Szak> Szakok { get; set; } = new List<Szak>();
     }
 
     public class Szak
@@ -21,6 +22,10 @@ namespace backend.Models
 
         [Required]
         public string Nev { get; set; } = string.Empty;
+
+        public int KarId { get; set; }
+        [ForeignKey("KarId")]
+        public Kar? Kar { get; set; }
 
         public ICollection<Kepzes> Kepzesek { get; set; } = new List<Kepzes>();
         public ICollection<Oktato> Oktatok { get; set; } = new List<Oktato>();

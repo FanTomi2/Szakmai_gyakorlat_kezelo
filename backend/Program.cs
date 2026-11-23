@@ -102,10 +102,10 @@ namespace backend
 
             var szakok = new List<backend.Models.Szak>
             {
-                new backend.Models.Szak { Nev = "Mérnökinformatikus" },
-                new backend.Models.Szak { Nev = "Gépészmérnök" },
-                new backend.Models.Szak { Nev = "Járműmérnök" },
-                new backend.Models.Szak { Nev = "Logisztikai mérnök" }
+                new backend.Models.Szak { Nev = "Mérnökinformatikus", KarId = kar.Id },
+                new backend.Models.Szak { Nev = "Gépészmérnök", KarId = kar.Id },
+                new backend.Models.Szak { Nev = "Járműmérnök", KarId = kar.Id },
+                new backend.Models.Szak { Nev = "Logisztikai mérnök", KarId = kar.Id }
             };
             context.Szakok.AddRange(szakok);
             context.SaveChanges();

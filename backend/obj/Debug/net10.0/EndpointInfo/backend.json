@@ -475,6 +475,12 @@
             "items": {
               "$ref": "#/components/schemas/Kepzes"
             }
+          },
+          "szakok": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Szak"
+            }
           }
         }
       },
@@ -624,6 +630,24 @@
           },
           "nev": {
             "type": "string"
+          },
+          "karId": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "kar": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Kar"
+              }
+            ]
           },
           "kepzesek": {
             "type": "array",
