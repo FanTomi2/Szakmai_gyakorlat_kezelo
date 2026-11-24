@@ -8,6 +8,7 @@ const getAuthHeaders = () => {
     };
 };
 
+//Bejelentkezés ellenőrzés
 const checkAuth = (response) => {
     if (response.status === 401) {
         localStorage.removeItem('token');
@@ -19,6 +20,7 @@ const checkAuth = (response) => {
     }
 };
 
+//adminisztrátor szerepkör ellenőrzése
 export const isAdmin = () => {
     const token = localStorage.getItem('token');
     if (!token) return false;
@@ -33,6 +35,7 @@ export const isAdmin = () => {
     }
 };
 
+//Hallgato lekérés
 export const fetchHallgatok = async () => {
     try {
         const response = await fetch(`${BASE_URL}Hallgatok/reszletes`, {

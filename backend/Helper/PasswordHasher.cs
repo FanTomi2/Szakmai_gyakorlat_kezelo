@@ -5,6 +5,7 @@ namespace backend.Helper
 {
     public class PasswordHasher
     {
+        //jelszó titkosítás
         public static string HashPassword(string password)
         {
             using (var sha256 = SHA256.Create())

@@ -4,6 +4,7 @@ import { checkNeptunKod } from '../services/hallgatoServices';
 
 function UjHallgatoForm({onVissza, onSikeresMentes, szerkesztendoAdat}) {
 
+    //adatok formázása
     const [formData, setFormData] = useState({
         neptunId: '',
         nev: '',
@@ -54,10 +55,8 @@ function UjHallgatoForm({onVissza, onSikeresMentes, szerkesztendoAdat}) {
             };
 
             if (szerkesztendoAdat) {
-                console.log("4/A. Módosítás (PUT) indítása...");
                 await updateHallgato(szerkesztendoAdat.neptunId, kuldoAdat);
             } else {
-                console.log("4/B. Új létrehozása (POST) indítása...");
                 await createHallgato(kuldoAdat);
             }
             
@@ -74,11 +73,12 @@ function UjHallgatoForm({onVissza, onSikeresMentes, szerkesztendoAdat}) {
         }
     };
 
+    //neptunből szerzett adatok
     const [neptunToltes, setNeptunToltes] = useState(false);
     const handleNeptunCheck = async () => {
         const kod = formData.neptunId?.trim();
         if (!kod || kod.length !== 6) {
-            alert("Kérlek adj meg egy 6 karakteres Neptun-kódot!");
+            alert("Kérlek adj meg egy Neptun-kódot!");
             return;
         }
 

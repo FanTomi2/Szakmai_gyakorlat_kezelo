@@ -3,7 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.EntityFrameworkCore; // Ez kell az .Include() használatához
+using Microsoft.EntityFrameworkCore;
 using backend.Data;
 
 namespace backend.Controllers
@@ -27,6 +27,7 @@ namespace backend.Controllers
             public string Jelszo { get; set; } = string.Empty;
         }
 
+        //bejelentkezés
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginData)
         {

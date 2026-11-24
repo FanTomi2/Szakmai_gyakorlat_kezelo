@@ -131,7 +131,7 @@ namespace SzakdogaApi.Controllers
                     CegNev = g.Key,
                     ErtekelesekSzama = g.Count(),
 
-                    // Kérdésenkénti átlagok (2 tizedesjegyre kerekítve)
+                    // Kérdésenkénti átlagok
                     AtlagKerdes1 = Math.Round(g.Average(e => e.kerdes1), 2),
                     AtlagKerdes2 = Math.Round(g.Average(e => e.kerdes2), 2),
                     AtlagKerdes3 = Math.Round(g.Average(e => e.kerdes3), 2),
@@ -216,6 +216,7 @@ namespace SzakdogaApi.Controllers
             _context.Kepzesek.Add(ujKepzes);
             await _context.SaveChangesAsync();
 
+            //email küldése
             string targy = "Szakmai Gyakorlat Értékelés";
             string uzenet = $@"
                 Kedves {dto.nev}!
@@ -356,7 +357,7 @@ namespace SzakdogaApi.Controllers
                     var szak = await _context.Szakok
                         .FirstOrDefaultAsync(s => s.Nev.ToLower() == szakNev.ToLower());
 
-                    // Képzési szint átalakítása (alapképzés -> BSc)
+                    // Képzési szint átalakítása
                     var szintSzoveg = sor.GetProperty("f6").GetString() ?? "";
                     var kepzesiSzint = szintSzoveg.Contains("alapképzés", StringComparison.OrdinalIgnoreCase)
                         ? "BSc"

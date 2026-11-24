@@ -13,6 +13,7 @@ function StatisztikaNezet() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    //adatbetoltes
     useEffect(() => {
         const adatokBetoltese = async () => {
             try {
@@ -41,6 +42,7 @@ function StatisztikaNezet() {
         return <div className="alert alert-error text-white font-bold">{error}</div>;
     }
 
+    //statisztika exportálás
     const handleStatExport = () => {
         const exportAdat = [
             { Kategória: 'Összes hallgató', Érték: stats.osszesHallgato },
@@ -98,13 +100,10 @@ function StatisztikaNezet() {
             tooltip: {
                 callbacks: {
                     label: function (context) {
-                        // Kiszámoljuk az összes adat összegét
                         const total = context.dataset.data.reduce((acc, curr) => acc + curr, 0);
                         const value = context.raw;
-                        // Százalék számítás 1 tizedesjegyre
                         const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
                         
-                        // Visszaadjuk a formázott szöveget
                         return `${context.label}: ${percentage}% (${value} fő)`;
                     }
                 }
@@ -125,7 +124,7 @@ function StatisztikaNezet() {
                 Export
             </button>
 
-            {/* --- 1. SZEKCIÓ: FELSŐ KÁRTYÁK --- */}
+            {/*FELSŐ KÁRTYÁK*/}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="stat bg-white rounded shadow-sm border border-slate-100">
                     <div className="stat-figure text-blue-500">
@@ -152,7 +151,7 @@ function StatisztikaNezet() {
                 </div>
             </div>
 
-            {/* --- 2. SZEKCIÓ: DIAGRAMOK --- */}
+            {/*DIAGRAMOK*/}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 
                 {/* Szakok eloszlása */}
@@ -199,7 +198,7 @@ function StatisztikaNezet() {
                 </div>
             </div>
 
-            {/* 3. SZEKCIÓ: ÉRTÉKELÉSEK TÁBLÁZATA*/}
+            {/*ÉRTÉKELÉSEK TÁBLÁZATA*/}
             <div className="card bg-white shadow-sm border border-slate-100 mt-6">
                 <div className="card-body p-6">
                     <h2 className="text-2xl font-bold text-gray-700 mb-6 border-b pb-2">

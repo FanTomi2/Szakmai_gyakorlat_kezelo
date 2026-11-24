@@ -22,6 +22,7 @@ function App() {
     const [szerkesztendoHallgato, setSzerkesztendoHallgato] = useState(null);
     const [keresoszoveg, setKeresoszoveg] = useState('');
 
+    //oldal tetejére
     useEffect(() => {
         const gorgetesFigyelo = () => {
             if(window.scrollY > 300) {
@@ -42,6 +43,7 @@ function App() {
         });
     };
 
+    //adatbetöltés
     const adatBetoltes = async () => {
         try {
             if (hallgatok.length === 0) {
@@ -62,6 +64,7 @@ function App() {
         }
     }, [isLoggedIn]);
 
+    //keresés
     const szurtHallgatok = hallgatok.filter((h) => {
         const nevTalalat = h.nev.toLowerCase().includes(keresoszoveg.toLowerCase());
         const neptunTalalat = h.neptunId.toLowerCase().includes(keresoszoveg.toLowerCase());
@@ -69,6 +72,7 @@ function App() {
         return nevTalalat || neptunTalalat || cegTalalt;
     });
 
+    //exportálás
     const handleExportCSV = () => {
         const exportAdat = hallgatok.map(h => ({
             'Név': h.nev,

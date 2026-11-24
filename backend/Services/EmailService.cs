@@ -35,7 +35,7 @@ namespace backend.Services
             await smtpClient.SendMailAsync(mailMessage);
             */
 
-            // Valódi levélküldés HEYLETT csak kiírjuk a terminálba/konzolra a levelet.
+            // Valódi levélküldés HEYLETT csak kiírjuk a konzolra a levelet.
 
             Console.WriteLine("\n=======================================================");
             Console.WriteLine($"[SZIMULÁLT E-MAIL KÜLDÉS - TESZT KÖRNYEZET]");

@@ -71,7 +71,6 @@ namespace backend.Models
         public string KepzesiSzint { get; set; } = string.Empty;
         public string SzakmaiGyakTelj { get; set; } = string.Empty;
 
-        // Idegen kulcsok
         public string NeptunId { get; set; }
         [ForeignKey("NeptunId")]
         public Hallgato? Hallgato { get; set; }

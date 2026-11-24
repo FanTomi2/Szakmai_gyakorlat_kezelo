@@ -90,6 +90,7 @@ namespace backend
             app.Run();
         }
 
+        //Nem valós adatokkal való feltöltés
         static void DataSeeder(backend.Data.AppDbContext context)
         {
             if (context.Szakok.Any()) return;
