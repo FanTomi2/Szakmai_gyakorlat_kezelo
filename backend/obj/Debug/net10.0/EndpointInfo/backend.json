@@ -167,6 +167,28 @@
         }
       }
     },
+    "/api/Hallgatok/neptun-check/{neptunId}": {
+      "get": {
+        "tags": [
+          "Hallgatok"
+        ],
+        "parameters": [
+          {
+            "name": "neptunId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Auth/login": {
       "post": {
         "tags": [

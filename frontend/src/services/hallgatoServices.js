@@ -138,3 +138,20 @@ export const updateHallgato = async (neptunId, hallgatoData) => {
         throw error;
     }
 };
+
+// Neptun adatok ellenőrzése
+export const checkNeptunKod = async (neptunId) => {
+    const response = await fetch(`${BASE_URL}Hallgatok/neptun-check/${neptunId}`, {
+        method: 'GET',
+        headers: getAuthHeaders()
+    });
+
+    checkAuth(response);
+
+    if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.message || "Hiba történt a Neptun lekérdezés során.");
+    }
+
+    return await response.json();
+};

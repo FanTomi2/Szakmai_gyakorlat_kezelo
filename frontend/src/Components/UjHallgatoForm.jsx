@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { createHallgato, updateHallgato } from "../services/hallgatoServices";
+import { checkNeptunKod } from '../services/hallgatoServices';
 
 function UjHallgatoForm({onVissza, onSikeresMentes, szerkesztendoAdat}) {
 
@@ -73,6 +74,38 @@ function UjHallgatoForm({onVissza, onSikeresMentes, szerkesztendoAdat}) {
         }
     };
 
+    const [neptunToltes, setNeptunToltes] = useState(false);
+    const handleNeptunCheck = async () => {
+        const kod = formData.neptunId?.trim();
+        if (!kod || kod.length !== 6) {
+            alert("Kérlek adj meg egy 6 karakteres Neptun-kódot!");
+            return;
+        }
+
+        setNeptunToltes(true);
+        try {
+            const adat = await checkNeptunKod(kod);
+
+            const teljesitesErtek = adat.teljesites?.toLowerCase() === 'levelező' ? 'levelező' : 'nappali';
+            const szintErtek = adat.kepzesiSzint?.toLowerCase().includes('foszk') ? 'foszk' : 'Bsc';
+
+            setFormData(prev => ({
+                ...prev,
+                neptunId: adat.neptunId || prev.neptunId,
+                email: adat.email || prev.email,
+                szakId: adat.szakId || prev.szakId,
+                teljesites: teljesitesErtek,
+                kepzesiSzint: szintErtek
+            }));
+
+            alert("Adatok sikeresen betöltve a Neptunból!");
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            setNeptunToltes(false);
+        }
+    };
+
     return (
         <div className="bg-white p-8 rounded-xl shadow-lg border border-blue-200 pb-4">
             <h2 className="text-2xl font-bold text-slate-800 mb-6 border-b pb-2">
@@ -86,9 +119,28 @@ function UjHallgatoForm({onVissza, onSikeresMentes, szerkesztendoAdat}) {
                 <div className="space-y-4">
                     <div>
                         <label className="label font-bold">Neptun kód</label>
-                        <input type="text" name="neptunId" value={formData.neptunId} onChange={handleChange} required maxLength="6" 
-                        className={`input input-bordered w-full uppercase ${szerkesztendoAdat ? 'bg-gray-100 cursor-not-allowed' : ''}`}
-                        placeholder="Pl: ABC123" />
+                        <div className="flex gap-2">
+                            <input
+                                type="text"
+                                name="neptunId"
+                                value={formData.neptunId}
+                                onChange={handleChange}
+                                required
+                                maxLength="6"
+                                className={`input input-bordered w-full uppercase ${szerkesztendoAdat ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                                placeholder="Pl: ABC123"
+                            />
+                            {!szerkesztendoAdat && (
+                                <button
+                                    type="button"
+                                    onClick={handleNeptunCheck}
+                                    disabled={neptunToltes}
+                                    className="btn btn-primary"
+                                >
+                                    {neptunToltes ? "Lekérés..." : "Check"}
+                                </button>
+                            )}
+                        </div>
                     </div>
                     <div>
                         <label className="label font-bold">Név</label>

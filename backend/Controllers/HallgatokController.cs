@@ -16,11 +16,13 @@ namespace SzakdogaApi.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IEmailService _emailService;
+        private readonly IConfiguration _config;
 
-        public HallgatokController(AppDbContext context, IEmailService emailService)
+        public HallgatokController(AppDbContext context, IEmailService emailService, IConfiguration config)
         {
             _context = context;
             _emailService = emailService;
+            _config = config;
         }
 
         // csak hallgatok
@@ -306,6 +308,72 @@ namespace SzakdogaApi.Controllers
 
             await _context.SaveChangesAsync();
             return Ok(new { message = "Sikeres módosítás!" });
+        }
+
+        // Neptun adatok lekérése Neptun-kód alapján
+        [HttpGet("neptun-check/{neptunId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> CheckNeptun(string neptunId)
+        {
+            var url = _config["NeptunApi:Url"];
+            var token = _config["NeptunApi:Token"];
+
+            if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(token))
+            {
+                return BadRequest(new { message = "A Neptun API konfiguráció hiányzik az appsettings.json fájlból!" });
+            }
+
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization =
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+            var cookie = _config["NeptunApi:Cookie"];
+            if (!string.IsNullOrEmpty(cookie))
+            {
+                client.DefaultRequestHeaders.Add("Cookie", cookie);
+            }
+            client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0");
+
+            var response = await client.GetAsync(url);
+            if (!response.IsSuccessStatusCode)
+            {
+                return StatusCode(502, new { message = "A Neptun API nem válaszolt vagy lejárt a token!" });
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            using var doc = System.Text.Json.JsonDocument.Parse(json);
+            var adatok = doc.RootElement.GetProperty("data");
+
+            var keresettKod = neptunId.Trim().ToUpper();
+
+            foreach (var sor in adatok.EnumerateArray())
+            {
+                var f0 = sor.GetProperty("f0").GetString()?.ToUpper();
+                if (f0 == keresettKod)
+                {
+                    // Szak megkeresése név alapján a saját adatbázisban
+                    var szakNev = sor.GetProperty("f4").GetString() ?? "";
+                    var szak = await _context.Szakok
+                        .FirstOrDefaultAsync(s => s.Nev.ToLower() == szakNev.ToLower());
+
+                    // Képzési szint átalakítása (alapképzés -> BSc)
+                    var szintSzoveg = sor.GetProperty("f6").GetString() ?? "";
+                    var kepzesiSzint = szintSzoveg.Contains("alapképzés", StringComparison.OrdinalIgnoreCase)
+                        ? "BSc"
+                        : "Foszk";
+
+                    return Ok(new
+                    {
+                        neptunId = f0,
+                        email = sor.GetProperty("f1").GetString() ?? "",
+                        szakId = szak?.Id ?? 1,
+                        teljesites = sor.GetProperty("f5").GetString() ?? "Nappali",
+                        kepzesiSzint = kepzesiSzint
+                    });
+                }
+            }
+
+            return NotFound(new { message = "A megadott Neptun-kód nem található a Neptun lekérdezésben." });
         }
     }
 }

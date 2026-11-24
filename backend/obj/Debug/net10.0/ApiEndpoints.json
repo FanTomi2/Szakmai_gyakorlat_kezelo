@@ -106,6 +106,22 @@
   },
   {
     "ContainingType": "SzakdogaApi.Controllers.HallgatokController",
+    "Method": "CheckNeptun",
+    "RelativePath": "api/Hallgatok/neptun-check/{neptunId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "neptunId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SzakdogaApi.Controllers.HallgatokController",
     "Method": "GetHallgatokReszletesen",
     "RelativePath": "api/Hallgatok/reszletes",
     "HttpMethod": "GET",
