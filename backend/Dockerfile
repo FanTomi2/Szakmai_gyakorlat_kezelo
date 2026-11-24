@@ -1,15 +1,12 @@
-# 1. fázis: Építés (Build)
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 COPY ["backend.csproj", "./"]
 RUN dotnet restore "backend.csproj"
 
-# Teljes kód másolása és publikálása
 COPY . .
 RUN dotnet publish "backend.csproj" -c Release -o /app/publish
 
-#Futtatás (Runtime)
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
 COPY --from=build /app/publish .
